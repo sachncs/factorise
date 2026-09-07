@@ -1,0 +1,127 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "factorise"
+dynamic = ["version"]
+description = "Fast, deterministic prime factorisation using Miller-Rabin and Pollard's Rho (Brent)."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [
+    { name = "Sachin", email = "sachncs@gmail.com" }
+]
+keywords = [
+    "prime", "factorisation", "factorization", "miller-rabin", "pollard-rho",
+    "math", "number-theory", "cryptography", "ecm", "quadratic-sieve", "gnfs"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Typing :: Typed",
+]
+dependencies = [
+]
+
+[project.urls]
+Homepage = "https://github.com/sachncs/factorise"
+Repository = "https://github.com/sachncs/factorise"
+Documentation = "https://github.com/sachncs/factorise/tree/master/docs"
+"Bug Tracker" = "https://github.com/sachncs/factorise/issues"
+Changelog = "https://github.com/sachncs/factorise/blob/master/CHANGELOG.md"
+
+[project.scripts]
+factorise = "factorise.cli:main"
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pytest-benchmark>=5.2.3",
+    "hypothesis>=6.0.0",
+    "pytest-cov>=4.0.0",
+    "ruff>=0.9.0",
+    "mypy>=1.8.0",
+    "build>=1.0.0",
+    "twine>=6.2.0",
+    "pip-audit>=2.9.0",
+    "cyclonedx-bom>=4.1.0",
+    "pre-commit>=4.1.0",
+]
+docs = [
+    "mkdocs>=1.6.0",
+    "mkdocs-material>=9.5.0",
+    "mkdocstrings[python]>=0.24.0",
+    "pymdown-extensions>=10.0.0",
+]
+
+[tool.hatch.version]
+path = "factorise/__init__.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["factorise"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers -q"
+
+[tool.coverage.report]
+fail_under = 90
+show_missing = true
+precision = 2
+
+[tool.mypy]
+python_version = "3.10"
+strict = true
+enable_error_code = ["no-untyped-def"]
+
+[[tool.mypy.overrides]]
+module = "tests.*"
+disable_error_code = ["no-untyped-def", "untyped-decorator"]
+
+[[tool.mypy.overrides]]
+module = "benchmarks.*"
+disable_error_code = ["no-untyped-def"]
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "hypothesis.*"
+ignore_missing_imports = true
+
+[tool.ruff]
+line-length = 80
+target-version = "py310"
+
+[tool.ruff.lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "UP",     # pyupgrade
+    "I",      # isort
+    "ISC",    # flake8-implicit-str-concat
+    "T20",    # flake8-print
+]
+ignore = [
+    "E501",   # line too long (handled by formatter)
+]
+
+[tool.ruff.lint.isort]
+force-single-line = true
+
+[tool.ruff.lint.per-file-ignores]
+"__init__.py" = ["F401"]
+"benchmarks/*" = ["F401", "B018", "T201"]
+"factorise/cli.py" = ["T201"]
+"scratch/*" = ["T201"]
+"tests/test_coverage_extensions.py" = ["B009", "B010"]
