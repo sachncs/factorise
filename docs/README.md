@@ -35,20 +35,23 @@ print(is_prime(7))  # True
 # Direct pipeline usage for large composites
 from factorise import FactorisationPipeline
 pipeline = FactorisationPipeline()
-stage_result = pipeline.attempt(123456789)
+result = pipeline.attempt(123456789)
 ```
 
 ## Algorithm Selection Guide
 
-Choose the right algorithm based on input size and characteristics:
+Choose the right algorithm based on input size and characteristics. The
+hybrid engine routes by **bit length**, not digit count; the bit ranges
+below are derived from `HybridConfig.bit_length_bucket` thresholds
+(40 / 66 / 133 / 233 / 366 bits).
 
-| Input Size | Recommended Algorithm | Notes |
+| Bit length | Recommended Algorithm | Notes |
 |------------|----------------------|-------|
-| < 20 digits | Pollard Rho (Brent) | Fast, general-purpose |
-| 20-40 digits | ECM (Elliptic Curve Method) | Efficient for medium factors |
-| 40-80 digits | Quadratic Sieve | General-purpose, robust |
-| 60-110 digits | SIQS | Self-initializing, best for this range |
-| > 110 digits | GNFS | Requires external `msieve` or `cado-nfs` binary |
+| < 40 bits (~12 digits) | Pollard Rho (Brent) | Fast, general-purpose |
+| 40–66 bits (~12–20 digits) | Pollard p-1, Pollard Rho | Medium factors |
+| 66–133 bits (~20–40 digits) | ECM, Pollard p-1 | Medium-large factors |
+| 133–366 bits (~40–110 digits) | ECM, SIQS | Large composites |
+| > 366 bits (~110 digits) | GNFS | External tool required |
 
 ## Available Documentation
 
@@ -134,13 +137,13 @@ result = engine.attempt(123456789)
 just test
 
 # Run with coverage
-just coverage
+just test-ci
 
 # Run linting
 just lint
 
 # Run benchmarks
-just bench
+just benchmark
 ```
 
 ## Exit Codes
