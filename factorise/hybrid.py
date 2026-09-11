@@ -27,7 +27,7 @@ from factorise.core import is_prime
 from factorise.pipeline import FactorStage
 from factorise.pipeline import StageStatus
 from factorise.stages.ecm_two_pass import TwoPassECMStage
-from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+from factorise.stages.gnfs_optimized import GNFSStage
 from factorise.stages.improved_pm1 import ImprovedPollardPMinusOneStage
 from factorise.stages.pollard_rho import PollardRhoStage
 from factorise.stages.siqs import SIQSStage
@@ -79,7 +79,7 @@ class HybridFactorisationEngine:
             max_iterations=self.config.rho_max_iterations,
             batch_size=self.config.rho_batch_size,
         )
-        self.gnfs_stage = OptimizedGNFSStage()
+        self.gnfs_stage = GNFSStage()
         self.stage_map: dict[str, FactorStage] = {
             "trial_division": self.trial_stage,
             "improved_pollard_pminus1": self.pm1_stage,

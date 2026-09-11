@@ -279,27 +279,27 @@ def test_siqs_large_input_skipped() -> None:
 
 def test_pure_gnfs_less_than_three() -> None:
     """Verify pure GNFS skips n < 3."""
-    from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+    from factorise.stages.gnfs_optimized import GNFSStage
 
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     result = stage.attempt(2)
     assert result.status is StageStatus.SKIPPED
 
 
 def test_pure_gnfs_prime() -> None:
     """Verify pure GNFS skips primes."""
-    from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+    from factorise.stages.gnfs_optimized import GNFSStage
 
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     result = stage.attempt(97)
     assert result.status is StageStatus.SKIPPED
 
 
 def test_pure_gnfs_perfect_square() -> None:
     """Verify pure GNFS finds perfect square factors."""
-    from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+    from factorise.stages.gnfs_optimized import GNFSStage
 
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     # Use a perfect square in the 60-256 bit range: (2**31 + 127)^2 ~ 62 bits
     n = (2**31 + 127)**2
     result = stage.attempt(n)
@@ -309,9 +309,9 @@ def test_pure_gnfs_perfect_square() -> None:
 
 def test_pure_gnfs_composite() -> None:
     """Verify pure GNFS factors a 61-bit composite."""
-    from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+    from factorise.stages.gnfs_optimized import GNFSStage
 
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     # 61-bit composite product of two ~30-bit primes
     n = 2147483647 * 2147483647
     result = stage.attempt(n)
@@ -321,18 +321,18 @@ def test_pure_gnfs_composite() -> None:
 
 def test_pure_gnfs_large_input_skipped() -> None:
     """Verify pure GNFS skips inputs above its bit range."""
-    from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+    from factorise.stages.gnfs_optimized import GNFSStage
 
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     result = stage.attempt(2**260 + 1)  # Above 256-bit maximum
     assert result.status is StageStatus.SKIPPED
 
 
 def test_pure_gnfs_small_input_skipped() -> None:
     """Verify pure GNFS skips inputs below its bit range."""
-    from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+    from factorise.stages.gnfs_optimized import GNFSStage
 
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     result = stage.attempt(91)
     assert result.status is StageStatus.SKIPPED
 
@@ -348,9 +348,9 @@ def test_gnfs_missing_binary() -> None:
     Uses a 300-bit input that is beyond pure Python's practical capability,
     so it should return FAILURE or SKIPPED.
     """
-    from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+    from factorise.stages.gnfs_optimized import GNFSStage
 
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     # 2**300 + 1 is 301 bits - above pure Python GNFS maximum
     result = stage.attempt(2**300 + 1)
     # Beyond pure Python range, should SKIP
@@ -359,18 +359,18 @@ def test_gnfs_missing_binary() -> None:
 
 def test_gnfs_too_small() -> None:
     """Verify GNFS skips very small inputs."""
-    from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+    from factorise.stages.gnfs_optimized import GNFSStage
 
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     result = stage.attempt(91)
     assert result.status is StageStatus.SKIPPED
 
 
 def test_gnfs_too_large() -> None:
     """Verify GNFS skips very large inputs."""
-    from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+    from factorise.stages.gnfs_optimized import GNFSStage
 
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     result = stage.attempt(2**600 + 1)
     assert result.status is StageStatus.SKIPPED
 
@@ -382,9 +382,9 @@ def test_gnfs_even_in_range() -> None:
     norms are always even.  The pipeline's trial-division stage handles
     these before GNFS is reached.
     """
-    from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+    from factorise.stages.gnfs_optimized import GNFSStage
 
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     result = stage.attempt(2**85)
     # May succeed (factor 2 via perfect square) or fail
     assert result.status in (StageStatus.SUCCESS, StageStatus.FAILURE)

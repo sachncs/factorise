@@ -29,7 +29,6 @@ from factorise.utils import sieve_primes
 __all__ = [
     "GNFSRelation",
     "GNFSStage",
-    "OptimizedGNFSStage",
     "Polynomial",
     "build_factor_bases",
     "factor_over_base",
@@ -788,7 +787,3 @@ class GNFSStage(FactorStage):
             return c
 
         return None
-
-
-# Alias for backwards compatibility
-OptimizedGNFSStage = GNFSStage

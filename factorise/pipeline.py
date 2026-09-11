@@ -221,7 +221,7 @@ class FactorisationPipeline:
 
     def _build_stage_map(self) -> dict[str, FactorStage]:
         """Build the stage map from the configured stage order."""
-        from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+        from factorise.stages.gnfs_optimized import GNFSStage
         from factorise.stages.improved_pm1 import ImprovedPollardPMinusOneStage
         from factorise.stages.pollard_rho import PollardRhoStage
         from factorise.stages.trial_division import OptimizedTrialDivisionStage
@@ -253,7 +253,7 @@ class FactorisationPipeline:
                 from factorise.stages.quadratic_sieve import QuadraticSieveStage
                 stages[name] = QuadraticSieveStage()
             elif name == "gnfs":
-                stages[name] = OptimizedGNFSStage()
+                stages[name] = GNFSStage()
         return stages
 
     @property

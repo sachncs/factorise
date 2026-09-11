@@ -7,7 +7,6 @@ and can be composed into a :class:`~factorise.pipeline.FactorisationPipeline`.
 from factorise.stages.ecm import ECMStage
 from factorise.stages.ecm_two_pass import TwoPassECMStage
 from factorise.stages.gnfs_optimized import GNFSStage
-from factorise.stages.gnfs_optimized import OptimizedGNFSStage
 from factorise.stages.improved_pm1 import ImprovedPollardPMinusOneStage
 from factorise.stages.pollard_rho import PollardRhoStage
 from factorise.stages.quadratic_sieve import QuadraticSieveStage
@@ -18,7 +17,6 @@ __all__ = [
     "ECMStage",
     "GNFSStage",
     "ImprovedPollardPMinusOneStage",
-    "OptimizedGNFSStage",
     "OptimizedTrialDivisionStage",
     "PollardRhoStage",
     "QuadraticSieveStage",
