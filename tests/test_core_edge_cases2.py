@@ -15,8 +15,7 @@ def test_carmichael_small() -> None:
     # 2 is even, not Carmichael
     assert has_carmichael_property(2) is False
     # 3 is prime, not Carmichael
-    assert (has_carmichael_property(3)
-            is True)  # bug: function returns True for primes
+    assert has_carmichael_property(3) is False
     assert has_carmichael_property(4) is False
 
 
@@ -37,9 +36,9 @@ def test_carmichael_composite() -> None:
 
 
 def test_carmichael_prime() -> None:
-    """Verify primes are not Carmichael (but function has a bug for primes)."""
-    assert has_carmichael_property(97) is True  # bug: returns True for primes
-    assert has_carmichael_property(101) is True  # bug: returns True for primes
+    """Verify primes are not Carmichael."""
+    assert has_carmichael_property(97) is False
+    assert has_carmichael_property(101) is False
 
 
 # ---------------------------------------------------------------------------
