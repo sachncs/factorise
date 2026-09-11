@@ -26,8 +26,8 @@ from factorise.core import has_carmichael_property
 from factorise.core import is_prime
 from factorise.hybrid import HybridFactorisationEngine
 from factorise.hybrid import hybrid_factorise
-from factorise.pipeline import FactorStage
 from factorise.pipeline import FactorisationPipeline
+from factorise.pipeline import FactorStage
 from factorise.pipeline import StageResult
 from factorise.pipeline import StageStatus
 
