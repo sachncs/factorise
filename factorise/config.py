@@ -501,7 +501,7 @@ class HybridConfig(AlgorithmConfig):
             GNFS_TIMEOUT_MAX,
         )
 
-    def digit_threshold_bucket(self, bit_length: int) -> int:
+    def bit_length_bucket(self, bit_length: int) -> int:
         """Classify an integer by bit length into a routing bucket.
 
         The hybrid engine uses the bucket to select an appropriate subset of
@@ -527,11 +527,13 @@ class HybridConfig(AlgorithmConfig):
             return 4
         return 5
 
+    digit_threshold_bucket = bit_length_bucket
+
     def stages_for_threshold(self, threshold: int) -> Sequence[str]:
-        """Return the ordered stage list for a given digit-count bucket.
+        """Return the ordered stage list for a given bit-length bucket.
 
         Args:
-            threshold: A bucket identifier returned by digit_threshold_bucket.
+            threshold: A bucket identifier returned by bit_length_bucket.
 
         Returns:
             A tuple of stage names in the order they should be attempted.
