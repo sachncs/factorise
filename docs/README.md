@@ -80,14 +80,15 @@ core.py             # Miller-Rabin, is_prime, ensure_integer_input
 pipeline.py         # Multi-stage orchestrator
 stages/
     trial_division.py
+    improved_pm1.py
     pollard_rho.py
     ecm.py
     ecm_two_pass.py
+    ecm_shared.py
     quadratic_sieve.py
     siqs.py
-    gnfs.py
-    ecm_shared.py     # Shared ECM utilities
-    qs_shared.py      # Shared QS/SIQS utilities
+    qs_shared.py
+    gnfs_optimized.py
     |
 hybrid.py           # Stateful pipeline with threshold routing
 config.py           # Configuration dataclasses
