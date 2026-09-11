@@ -29,13 +29,26 @@ DEFAULT_LOG_FORMAT = "human"
 class JsonFormatter(logging.Formatter):
     """Render log records as single-line JSON objects."""
 
+    _TRACE_ENV_VARS = (
+        "FACTORISE_REQUEST_ID",
+        "FACTORISE_CORRELATION_ID",
+        "FACTORISE_TRACE_ID",
+        "FACTORISE_SPAN_ID",
+        "FACTORISE_SESSION_ID",
+    )
+
     def format(self, record: logging.LogRecord) -> str:
-        payload = {
+        payload: dict[str, str] = {
             "ts": self.formatTime(record, "%H:%M:%S"),
             "level": record.levelname,
             "message": record.getMessage(),
             "logger": record.name,
         }
+        for var in self._TRACE_ENV_VARS:
+            value = os.getenv(var)
+            if value:
+                key = var.removeprefix("FACTORISE_").lower()
+                payload[key] = value
         return json.dumps(payload, sort_keys=True)
 
 
