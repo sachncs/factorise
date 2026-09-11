@@ -218,6 +218,11 @@ class FactoriserConfig(AlgorithmConfig):
             seed=int(seed) if seed is not None else None,
         )
 
+    @property
+    def log_format(self) -> str:
+        """Return the configured log format (human|json)."""
+        return os.getenv("FACTORISE_LOG_FORMAT", "human")
+
 
 # ---------------------------------------------------------------------------
 # Pipeline configuration

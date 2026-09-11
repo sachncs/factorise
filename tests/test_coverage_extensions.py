@@ -83,7 +83,7 @@ def test_main_configure_logging_value_error() -> None:
     import factorise.cli as cli_module
     original = getattr(cli_module, "configure_logging")
 
-    def _bad_configure_logging(_level: str) -> None:
+    def _bad_configure_logging(_level: str, _format: str = "human") -> None:
         raise ValueError("bad")
 
     setattr(cli_module, "configure_logging", _bad_configure_logging)

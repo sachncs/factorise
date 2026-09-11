@@ -8,7 +8,9 @@ from __future__ import annotations
 __all__ = ["main"]
 
 import argparse
+import json
 import logging
+import os
 import signal
 import sys
 import time
@@ -21,6 +23,20 @@ from factorise.core import factorise
 
 LOGGER = logging.getLogger("factorise")
 DEFAULT_LOG_LEVEL = "WARNING"
+DEFAULT_LOG_FORMAT = "human"
+
+
+class JsonFormatter(logging.Formatter):
+    """Render log records as single-line JSON objects."""
+
+    def format(self, record: logging.LogRecord) -> str:
+        payload = {
+            "ts": self.formatTime(record, "%H:%M:%S"),
+            "level": record.levelname,
+            "message": record.getMessage(),
+            "logger": record.name,
+        }
+        return json.dumps(payload, sort_keys=True)
 
 
 def elapsed_ms(start: float) -> float:
@@ -53,17 +69,27 @@ def display_factors(result: FactorisationResult, *, verbose: bool) -> None:
         print(f"  {ansi('2', 'Full expression:')} {result.expression()}\n")
 
 
-def configure_logging(log_level: str) -> None:
+def configure_logging(log_level: str, log_format: str = DEFAULT_LOG_FORMAT,
+                       ) -> None:
     """Configure the global logger formatting and verbosity."""
     level = getattr(logging, log_level.upper(), None)
     if not isinstance(level, int):
         valid = ", ".join(sorted(("DEBUG", "INFO", "WARNING", "ERROR")))
         raise ValueError(f"log_level must be one of: {valid}")
+    if log_format not in ("human", "json"):
+        raise ValueError("log_format must be one of: human, json")
 
+    handlers: list[logging.Handler] = []
+    if log_format == "json":
+        handler: logging.Handler = logging.StreamHandler()
+        handler.setFormatter(JsonFormatter())
+        handlers.append(handler)
     logging.basicConfig(
         level=level,
         format="%(asctime)s %(levelname)s %(message)s",
         datefmt="%H:%M:%S",
+        handlers=handlers or None,
+        force=True,
     )
     LOGGER.setLevel(level)
 
@@ -91,6 +117,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         choices=["DEBUG", "INFO", "WARNING", "ERROR"],
         help="Logging level (default: WARNING).",
     )
+    parser.add_argument(
+        "--log-format",
+        default=os.getenv("FACTORISE_LOG_FORMAT", DEFAULT_LOG_FORMAT),
+        choices=["human", "json"],
+        help="Log output format: human (default) or json.",
+    )
     return parser.parse_args(argv)
 
 
@@ -114,7 +146,7 @@ def main(argv: list[str] | None = None) -> None:
     args = parse_args(argv)
 
     try:
-        configure_logging(args.log_level)
+        configure_logging(args.log_level, args.log_format)
     except ValueError as exc:
         print(f"{ansi('31', 'Configuration Error:')} {exc}", file=sys.stderr)
         sys.exit(1)
