@@ -41,7 +41,7 @@ Immutable frozen dataclasses enforce fail-fast validation:
 
 - **`FactoriserConfig`**: Core algorithm parameters (batch size, retries, seed)
 - **`PipelineConfig`**: Extends `FactoriserConfig` with stage-specific bounds
-- **`HybridConfig`**: Digit-count thresholds for adaptive routing
+- **`HybridConfig`**: Bit-length thresholds for adaptive routing
 
 All configs support construction from environment variables via `from_env()`.
 
