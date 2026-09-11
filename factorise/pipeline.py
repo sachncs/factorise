@@ -28,7 +28,6 @@ from factorise.config import FactoriserConfig
 from factorise.config import PipelineConfig
 from factorise.core import EXTENDED_SMALL_PRIMES
 from factorise.core import FactorisationError
-from factorise.core import ensure_integer_input
 from factorise.core import find_nontrivial_factor_pollard_brent
 from factorise.core import is_prime
 
