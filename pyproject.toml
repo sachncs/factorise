@@ -5,7 +5,7 @@ build-backend = "hatchling.build"
 [project]
 name = "factorise"
 dynamic = ["version"]
-description = "Fast, deterministic prime factorisation using Miller-Rabin and Pollard's Rho (Brent)."
+description = "Deterministic prime factorisation for Python using Miller-Rabin primality testing, Pollard's Rho (Brent), Pollard p-1, ECM, Quadratic Sieve, SIQS, and GNFS, with an adaptive hybrid engine that selects the right algorithm by input size."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { file = "LICENSE" }
