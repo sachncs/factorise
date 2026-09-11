@@ -113,9 +113,9 @@ class TestStageInterface:
         assert result.status is StageStatus.FAILURE
 
     def test_pollard_pminus1_stage(self) -> None:
-        from factorise.pipeline import PollardPMinusOneStage
+        from factorise.stages.improved_pm1 import ImprovedPollardPMinusOneStage
 
-        stage = PollardPMinusOneStage(bound=10**6)
+        stage = ImprovedPollardPMinusOneStage()
         assert stage.name == "pollard_pminus1"
         # 91 = 7*13 — pollard p-1 might find a factor if smooth
         stage.attempt(91)
