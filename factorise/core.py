@@ -10,6 +10,7 @@ import enum
 import logging
 import math
 import random
+import secrets
 import time
 from collections import Counter
 from collections.abc import Generator
@@ -1676,10 +1677,10 @@ def find_nontrivial_factor_pollard_brent(
         return root
 
     remaining_iterations = config.max_iterations
+    base_seed = config.seed if config.seed is not None else secrets.randbits(64)
 
     for attempt in range(1, config.max_retries + 1):
-        rng = (random.Random(config.seed +
-                             attempt) if config.seed is not None else random)
+        rng = random.Random(base_seed + attempt)
         y = rng.randint(1, n - 1)
         c = rng.randint(1, n - 1)
         LOGGER.debug("pollard_brent_attempt n=%d attempt=%d y=%d c=%d", n,
