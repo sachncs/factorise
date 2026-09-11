@@ -1364,10 +1364,13 @@ def has_carmichael_property(n: int) -> bool:
         n: A positive integer.
 
     Returns:
-        True if *n* satisfies the Carmichael condition, False otherwise.
+        True if *n* is a composite Carmichael number, False otherwise.
+        Primes and non-Carmichael composites both return False.
 
     """
     if n < INT_MIN_VALID or n % 2 == 0:
+        return False
+    if is_prime(n):
         return False
 
     remaining = n
@@ -1383,10 +1386,6 @@ def has_carmichael_property(n: int) -> bool:
         p += 1 if p == 2 else 2
 
     if remaining > 1:
-        # NOTE: This branch incorrectly returns True for prime inputs because
-        # remaining == n when n is prime, setting found_divisor = True and
-        # passing the (n-1) % (remaining-1) == 0 check. Preserved for
-        # backward compatibility with existing tests.
         found_divisor = True
         if (n - 1) % (remaining - 1) != 0:
             return False
