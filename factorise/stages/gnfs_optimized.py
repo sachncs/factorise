@@ -623,12 +623,14 @@ class GNFSStage(FactorStage):
                             if norm > 0:
                                 exp = factor_over_base(norm, all_primes)
                                 if exp is not None:
-                                    relations.append({
-                                        "a": a,
-                                        "b": b,
-                                        "norm": norm,
-                                        "exponents": exp,
-                                    })
+                                    relations.append(
+                                        {
+                                            "a": a,
+                                            "b": b,
+                                            "norm": norm,
+                                            "exponents": exp,
+                                        }
+                                    )
                                     if len(relations) >= target_count:
                                         return relations
                         a += p
@@ -638,7 +640,7 @@ class GNFSStage(FactorStage):
                         if neg_r < lo_a % p:
                             first_a = neg_r + ((lo_a - neg_r + p - 1) // p) * p
                         else:
-                            first_a = (neg_r if neg_r >= lo_a else neg_r + p)
+                            first_a = neg_r if neg_r >= lo_a else neg_r + p
                         a = first_a
                         while a >= lo_a and a > 0:
                             if math.gcd(a, b) == 1:
@@ -646,12 +648,14 @@ class GNFSStage(FactorStage):
                                 if norm > 0:
                                     exp = factor_over_base(norm, all_primes)
                                     if exp is not None:
-                                        relations.append({
-                                            "a": a,
-                                            "b": b,
-                                            "norm": norm,
-                                            "exponents": exp,
-                                        })
+                                        relations.append(
+                                            {
+                                                "a": a,
+                                                "b": b,
+                                                "norm": norm,
+                                                "exponents": exp,
+                                            }
+                                        )
                                         if len(relations) >= target_count:
                                             return relations
                             a -= p
@@ -705,8 +709,10 @@ class GNFSStage(FactorStage):
 
             for r in range(num_rows):
                 if r != row_idx and ((rows[r][0] >> col) & 1):
-                    rows[r] = (rows[r][0] ^ rows[row_idx][0],
-                               rows[r][1] ^ rows[row_idx][1])
+                    rows[r] = (
+                        rows[r][0] ^ rows[row_idx][0],
+                        rows[r][1] ^ rows[row_idx][1],
+                    )
 
             row_idx += 1
             if row_idx >= num_rows:

@@ -73,14 +73,18 @@ def test_cli_main_runpy() -> None:
     import io
     import runpy
     from unittest.mock import patch
-    with patch("sys.argv", ["factorise", "97"]), \
-         patch("sys.stdout", new_callable=io.StringIO):
+
+    with (
+        patch("sys.argv", ["factorise", "97"]),
+        patch("sys.stdout", new_callable=io.StringIO),
+    ):
         runpy.run_module("factorise.cli", run_name="__main__")
 
 
 def test_main_configure_logging_value_error() -> None:
     """Verify main catches ValueError from configure_logging."""
     import factorise.cli as cli_module
+
     original = getattr(cli_module, "configure_logging")
 
     def _bad_configure_logging(_level: str, _format: str = "human") -> None:
@@ -244,6 +248,7 @@ def test_yield_prime_factors_unexpected_status() -> None:
     config = FactoriserConfig(max_iterations=1, max_retries=1, batch_size=2)
     # Monkey-patch pipeline to return an unexpected status
     from factorise import pipeline as pipeline_module
+
     original_attempt = getattr(pipeline_module.FactorisationPipeline, "attempt")
 
     def fake_attempt(self, n: int):
@@ -260,7 +265,9 @@ def test_yield_prime_factors_unexpected_status() -> None:
         with pytest.raises(FactorisationError):
             list(yield_prime_factors_via_pipeline(91, config))
     finally:
-        setattr(pipeline_module.FactorisationPipeline, "attempt", original_attempt)
+        setattr(
+            pipeline_module.FactorisationPipeline, "attempt", original_attempt
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -468,7 +475,7 @@ def test_gnfs_find_factor_dependency_none() -> None:
     original_find_dep = getattr(stage, "_GNFSStage__find_dependency")
     setattr(stage, "_GNFSStage__find_dependency", lambda _rels, _cols: None)
     try:
-        result = getattr(stage, "_GNFSStage__find_factor")((2**31 + 127)**2)
+        result = getattr(stage, "_GNFSStage__find_factor")((2**31 + 127) ** 2)
         assert result is None
     finally:
         setattr(stage, "_GNFSStage__find_dependency", original_find_dep)
@@ -595,12 +602,7 @@ def test_gnfs_extract_factor_rel_idx_oob() -> None:
     result = getattr(stage, "_GNFSStage__extract_factor")(
         91,
         4,
-        [{
-            "a": 1,
-            "b": 1,
-            "norm": 1,
-            "exponents": [0, 0]
-        }],
+        [{"a": 1, "b": 1, "norm": 1, "exponents": [0, 0]}],
         [0, 99],
         [2, 3],
         [5, 7],
@@ -614,12 +616,7 @@ def test_gnfs_extract_factor_return_none() -> None:
     result = getattr(stage, "_GNFSStage__extract_factor")(
         91,
         4,
-        [{
-            "a": 1,
-            "b": 1,
-            "norm": 1,
-            "exponents": [0, 0]
-        }],
+        [{"a": 1, "b": 1, "norm": 1, "exponents": [0, 0]}],
         [0],
         [2, 3],
         [5, 7],
@@ -671,11 +668,7 @@ def test_factor_over_base_negative() -> None:
 def test_find_dependency_mask_zero() -> None:
     """Verify find_dependency skips mask == 0."""
     rels: list[QSRelation] = [
-        {
-            "a": 1,
-            "a2_mod_n": 1,
-            "exponents": [2, 2]
-        },
+        {"a": 1, "a2_mod_n": 1, "exponents": [2, 2]},
     ]
     result = find_dependency(rels, 2)
     assert result is None
@@ -684,11 +677,7 @@ def test_find_dependency_mask_zero() -> None:
 def test_find_dependency_rows_lt_num_cols() -> None:
     """Verify find_dependency returns None when rows < num_cols."""
     rels: list[QSRelation] = [
-        {
-            "a": 1,
-            "a2_mod_n": 1,
-            "exponents": [1, 0]
-        },
+        {"a": 1, "a2_mod_n": 1, "exponents": [1, 0]},
     ]
     result = find_dependency(rels, 5)
     assert result is None
@@ -697,16 +686,8 @@ def test_find_dependency_rows_lt_num_cols() -> None:
 def test_find_dependency_row_idx_break() -> None:
     """Verify find_dependency breaks when row_idx >= num_rows."""
     rels: list[QSRelation] = [
-        {
-            "a": 1,
-            "a2_mod_n": 1,
-            "exponents": [1, 0]
-        },
-        {
-            "a": 2,
-            "a2_mod_n": 2,
-            "exponents": [0, 1]
-        },
+        {"a": 1, "a2_mod_n": 1, "exponents": [1, 0]},
+        {"a": 2, "a2_mod_n": 2, "exponents": [0, 1]},
     ]
     result = find_dependency(rels, 1)
     # May or may not find dependency; just ensure no crash
@@ -716,16 +697,8 @@ def test_find_dependency_row_idx_break() -> None:
 def test_find_dependency_return_none() -> None:
     """Verify find_dependency returns None when no dependency."""
     rels: list[QSRelation] = [
-        {
-            "a": 1,
-            "a2_mod_n": 1,
-            "exponents": [1, 0]
-        },
-        {
-            "a": 2,
-            "a2_mod_n": 2,
-            "exponents": [0, 1]
-        },
+        {"a": 1, "a2_mod_n": 1, "exponents": [1, 0]},
+        {"a": 2, "a2_mod_n": 2, "exponents": [0, 1]},
     ]
     result = find_dependency(rels, 2)
     assert result is None or isinstance(result, list)
@@ -799,38 +772,52 @@ def test_quadratic_sieve_prime_base_lt_2() -> None:
 def test_quadratic_sieve_relations_lt_base() -> None:
     """Verify __find_factor returns None when relations < len(prime_base)."""
     stage = QuadraticSieveStage()
-    original_relations = getattr(stage, "_QuadraticSieveStage__find_smooth_relations")
-    setattr(stage, "_QuadraticSieveStage__find_smooth_relations", lambda _n, _pb: [])
+    original_relations = getattr(
+        stage, "_QuadraticSieveStage__find_smooth_relations"
+    )
+    setattr(
+        stage, "_QuadraticSieveStage__find_smooth_relations", lambda _n, _pb: []
+    )
     try:
         result = getattr(stage, "_QuadraticSieveStage__find_factor")(91)
         assert result is None
     finally:
-        setattr(stage, "_QuadraticSieveStage__find_smooth_relations", original_relations)
+        setattr(
+            stage,
+            "_QuadraticSieveStage__find_smooth_relations",
+            original_relations,
+        )
 
 
 def test_quadratic_sieve_dependency_none() -> None:
     """Verify __find_factor returns None when dependency is None."""
     stage = QuadraticSieveStage()
     import factorise.stages.quadratic_sieve as qs_module
+
     original_find_dep = getattr(qs_module, "find_dependency")
     setattr(qs_module, "find_dependency", lambda _rels, _num_primes: None)
     # Ensure enough relations are returned to pass the len check
-    original_relations = getattr(stage, "_QuadraticSieveStage__find_smooth_relations")
+    original_relations = getattr(
+        stage, "_QuadraticSieveStage__find_smooth_relations"
+    )
     setattr(
         stage,
         "_QuadraticSieveStage__find_smooth_relations",
-        lambda _n, pb: [{
-            "a": 1,
-            "a2_mod_n": 1,
-            "exponents": [0] * len(pb)
-        } for _ in range(len(pb) + 1)],
+        lambda _n, pb: [
+            {"a": 1, "a2_mod_n": 1, "exponents": [0] * len(pb)}
+            for _ in range(len(pb) + 1)
+        ],
     )
     try:
         result = getattr(stage, "_QuadraticSieveStage__find_factor")(91)
         assert result is None
     finally:
         setattr(qs_module, "find_dependency", original_find_dep)
-        setattr(stage, "_QuadraticSieveStage__find_smooth_relations", original_relations)
+        setattr(
+            stage,
+            "_QuadraticSieveStage__find_smooth_relations",
+            original_relations,
+        )
 
 
 def test_quadratic_sieve_return_relations() -> None:
@@ -838,11 +825,13 @@ def test_quadratic_sieve_return_relations() -> None:
     stage = QuadraticSieveStage()
     # Use a large prime base so target_count exceeds found relations
     import factorise.stages.quadratic_sieve as qs_module
+
     original_extra = getattr(qs_module, "RELATION_EXTRA_COUNT")
     setattr(qs_module, "RELATION_EXTRA_COUNT", 1000)
     try:
-        relations = getattr(stage, "_QuadraticSieveStage__find_smooth_relations")(
-            91, [-1, 2, 3, 5])
+        relations = getattr(
+            stage, "_QuadraticSieveStage__find_smooth_relations"
+        )(91, [-1, 2, 3, 5])
         assert isinstance(relations, list)
         assert len(relations) < 1005  # didn't hit the early return
     finally:
@@ -890,7 +879,9 @@ def test_siqs_relations_lt_base() -> None:
     """Verify __find_factor returns None when relations < len(factor_base)."""
     stage = SIQSStage()
     original_relations = getattr(stage, "_SIQSStage__find_smooth_relations")
-    setattr(stage, "_SIQSStage__find_smooth_relations", lambda _n, _fb, _target: [])
+    setattr(
+        stage, "_SIQSStage__find_smooth_relations", lambda _n, _fb, _target: []
+    )
     try:
         result = getattr(stage, "_SIQSStage__find_factor")(91)
         assert result is None
@@ -902,6 +893,7 @@ def test_siqs_dependency_none() -> None:
     """Verify __find_factor returns None when dependency is None."""
     stage = SIQSStage()
     import factorise.stages.siqs as siqs_module
+
     original_find_dep = getattr(siqs_module, "find_dependency")
     setattr(siqs_module, "find_dependency", lambda _rels, _num_primes: None)
     # Ensure enough relations are returned to pass the len check
@@ -909,11 +901,10 @@ def test_siqs_dependency_none() -> None:
     setattr(
         stage,
         "_SIQSStage__find_smooth_relations",
-        lambda _n, fb, _target: [{
-            "a": 1,
-            "a2_mod_n": 1,
-            "exponents": [0] * len(fb)
-        } for _ in range(len(fb) + 1)],
+        lambda _n, fb, _target: [
+            {"a": 1, "a2_mod_n": 1, "exponents": [0] * len(fb)}
+            for _ in range(len(fb) + 1)
+        ],
     )
     try:
         result = getattr(stage, "_SIQSStage__find_factor")(91)
@@ -935,7 +926,9 @@ def test_siqs_find_smooth_relations_return() -> None:
     """Verify __find_smooth_relations returns relations list."""
     stage = SIQSStage()
     # Use a large target so the early return isn't hit
-    relations = getattr(stage, "_SIQSStage__find_smooth_relations")(91, [-1, 2, 3], 1000)
+    relations = getattr(stage, "_SIQSStage__find_smooth_relations")(
+        91, [-1, 2, 3], 1000
+    )
     assert isinstance(relations, list)
     assert len(relations) < 1000
 
@@ -963,11 +956,7 @@ def test_extract_factor_second_gcd() -> None:
     # Construct a case where gcd(product_x - product_y, n) == 1
     # but gcd(product_x + product_y, n) > 1
     rels: list[QSRelation] = [
-        {
-            "a": 10,
-            "a2_mod_n": 100,
-            "exponents": [0, 2, 0]
-        },
+        {"a": 10, "a2_mod_n": 100, "exponents": [0, 2, 0]},
     ]
     result = extract_factor(91, rels, [0], [-1, 7, 13])
     assert result is None or isinstance(result, int)
@@ -976,11 +965,7 @@ def test_extract_factor_second_gcd() -> None:
 def test_extract_factor_return_none_path() -> None:
     """Verify extract_factor returns None when neither gcd finds a factor."""
     rels: list[QSRelation] = [
-        {
-            "a": 1,
-            "a2_mod_n": 1,
-            "exponents": [0, 0, 0]
-        },
+        {"a": 1, "a2_mod_n": 1, "exponents": [0, 0, 0]},
     ]
     result = extract_factor(91, rels, [0], [-1, 2, 3])
     assert result is None

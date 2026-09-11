@@ -33,33 +33,15 @@ def test_hybrid_config_custom() -> None:
 @pytest.mark.parametrize(
     "kwargs",
     [
-        {
-            "trial_division_bound": 0
-        },
-        {
-            "trial_division_bound": -1
-        },
-        {
-            "rho_max_retries": 0
-        },
-        {
-            "rho_max_iterations": 0
-        },
-        {
-            "rho_batch_size": 0
-        },
-        {
-            "ecm_first_pass_curves": 0
-        },
-        {
-            "ecm_second_pass_curves": 0
-        },
-        {
-            "siqs_max_bit_length": 0
-        },
-        {
-            "gnfs_timeout_seconds": 0
-        },
+        {"trial_division_bound": 0},
+        {"trial_division_bound": -1},
+        {"rho_max_retries": 0},
+        {"rho_max_iterations": 0},
+        {"rho_batch_size": 0},
+        {"ecm_first_pass_curves": 0},
+        {"ecm_second_pass_curves": 0},
+        {"siqs_max_bit_length": 0},
+        {"gnfs_timeout_seconds": 0},
     ],
 )
 def test_hybrid_config_invalid(kwargs: dict[str, Any]) -> None:
