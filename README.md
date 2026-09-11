@@ -5,6 +5,7 @@
     <a href="#installation"><img src="https://img.shields.io/badge/python-3.10%2B-blue" alt="Python"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-green" alt="License"></a>
     <a href="https://github.com/sachncs/factorise/actions"><img src="https://img.shields.io/github/actions/workflow/status/sachncs/factorise/ci.yml?branch=master" alt="CI"></a>
+    <a href="https://sachncs.github.io/factorise/"><img src="https://img.shields.io/badge/docs-sachncs.github.io-blue" alt="Docs"></a>
     <a href="https://pypi.org/project/factorise/"><img src="https://img.shields.io/pypi/v/factorise" alt="PyPI"></a>
     <a href="https://github.com/sachncs/factorise/stargazers"><img src="https://img.shields.io/github/stars/sachncs/factorise" alt="Stars"></a>
   </p>
