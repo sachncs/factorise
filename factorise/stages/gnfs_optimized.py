@@ -183,9 +183,11 @@ def select_polynomial(n: int) -> tuple[Polynomial, int]:
         A tuple ``(polynomial, m)``.
 
     """
-    m = int(round(n**(1.0 / 3.0)))
+    from factorise.core import integer_kth_root
+
+    m = integer_kth_root(n, 3)
     if m < 2:
-        m = max(2, int(n**(1.0 / 3.0)) + 1)
+        m = 2
     return Polynomial(a=1, b=0, c=-m), m
 
 
