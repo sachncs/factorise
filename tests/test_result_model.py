@@ -23,4 +23,11 @@ def test_result_expression_complex() -> None:
                                factors=[],
                                powers={},
                                is_prime=False)
-    assert res2.expression() == ""
+    assert res2.expression() == "1"
+
+    res3 = FactorisationResult(original=-1,
+                               sign=-1,
+                               factors=[],
+                               powers={},
+                               is_prime=False)
+    assert res3.expression() == "-1"

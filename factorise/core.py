@@ -1184,6 +1184,8 @@ class FactorisationResult:
 
     def expression(self) -> str:
         """Return a readable prime product string, e.g. '-1 * 2^2 * 3'."""
+        if not self.powers:
+            return "-1" if self.sign == -1 else "1"
         terms = [
             f"{p}^{e}" if e > 1 else str(p)
             for p, e in sorted(self.powers.items())
