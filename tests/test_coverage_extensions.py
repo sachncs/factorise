@@ -20,7 +20,6 @@ from factorise.core import execute_brent_pollard_cycle
 from factorise.core import integer_kth_root
 from factorise.hybrid import HybridFactorisationEngine
 from factorise.pipeline import FactorisationPipeline
-from factorise.pipeline import PollardPMinusOneStage
 from factorise.pipeline import StageResult
 from factorise.pipeline import StageStatus
 from factorise.pipeline import yield_prime_factors_via_pipeline
@@ -218,16 +217,16 @@ def test_stage_result_eq_non_instance() -> None:
 
 
 def test_pollard_pminus_one_stage_n_lt_3() -> None:
-    """Verify PollardPMinusOneStage skips n < 3."""
-    stage = PollardPMinusOneStage(bound=100)
+    """Verify ImprovedPollardPMinusOneStage skips n < 3."""
+    stage = ImprovedPollardPMinusOneStage(bounds=(100,), bases=(2,))
     result = stage.attempt(2)
     assert result.status is StageStatus.SKIPPED
     assert result.reason == "n < 3"
 
 
 def test_pollard_pminus_one_stage_failure() -> None:
-    """Verify PollardPMinusOneStage returns FAILURE when no factor found."""
-    stage = PollardPMinusOneStage(bound=10)
+    """Verify ImprovedPollardPMinusOneStage returns FAILURE when no factor found."""
+    stage = ImprovedPollardPMinusOneStage(bounds=(10,), bases=(2,))
     result = stage.attempt(91)
     assert result.status is StageStatus.FAILURE
 

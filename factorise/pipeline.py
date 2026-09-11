@@ -19,7 +19,6 @@ from __future__ import annotations
 import dataclasses
 import enum
 import logging
-import math
 import time
 from abc import ABC
 from abc import abstractmethod
@@ -39,7 +38,6 @@ __all__ = [
     "FactorStage",
     "FactorisationPipeline",
     "PipelineConfig",
-    "PollardPMinusOneStage",
     "StageResult",
     "StageStatus",
     "yield_prime_factors_via_pipeline",
@@ -123,73 +121,6 @@ class FactorStage(ABC):
 def elapsed_ms(start: float) -> float:
     """Return elapsed milliseconds since *start* (from time.monotonic())."""
     return (time.monotonic() - start) * 1000
-
-
-# ---------------------------------------------------------------------------
-# Pollard p-1 stage
-# ---------------------------------------------------------------------------
-
-
-class PollardPMinusOneStage(FactorStage):
-    """Pollard's p-1 method.
-
-    Finds a factor p when p-1 is smooth (has only small prime factors).
-    It is particularly effective as an intermediate stage between trial division
-    and Pollard's Rho because it can find larger smooth factors that trial
-    division misses.
-    """
-
-    name = "pollard_pminus1"
-
-    def __init__(self, bound: int | None = None) -> None:
-        """Initialise with a smoothness bound.
-
-        Args:
-            bound: The smoothness limit for the p-1 method.
-
-        """
-        self._bound = bound if bound is not None else 10**6
-
-    def attempt(self, n: int) -> StageResult:
-        """Attempt to find a factor of *n* using Pollard p-1."""
-        start = time.monotonic()
-        ensure_integer_input(n)
-
-        if n < 3:
-            return StageResult(
-                stage_name=self.name,
-                status=StageStatus.SKIPPED,
-                factor=None,
-                elapsed_ms=elapsed_ms(start),
-                reason="n < 3",
-            )
-
-        for base in (2, 3, 5, 7, 11):
-            a = pow(base, self._bound, n)
-            g = math.gcd(a - 1, n)
-            if 1 < g < n:
-                _LOG.debug(
-                    "stage=%s n=%d factor=%d base=%d",
-                    self.name,
-                    n,
-                    g,
-                    base,
-                )
-                return StageResult(
-                    stage_name=self.name,
-                    status=StageStatus.SUCCESS,
-                    factor=g,
-                    elapsed_ms=elapsed_ms(start),
-                    iterations_used=1,
-                )
-
-        return StageResult(
-            stage_name=self.name,
-            status=StageStatus.FAILURE,
-            factor=None,
-            elapsed_ms=elapsed_ms(start),
-            reason=f"no factor found with bound={self._bound}",
-        )
 
 
 # ---------------------------------------------------------------------------
