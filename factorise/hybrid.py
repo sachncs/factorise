@@ -160,13 +160,13 @@ class HybridFactorisationEngine:
             return None
         cofactor = abs_n // 2
         co_result = self.attempt(cofactor)
-        factors = [2, *co_result.factors]
         powers = dict(co_result.powers)
         powers[2] = powers.get(2, 0) + 1
+        factors = sorted(powers.keys())
         return FactorisationResult(
             original=sign * abs_n,
             sign=sign,
-            factors=sorted(factors),
+            factors=factors,
             powers=powers,
             is_prime=False,
         )
