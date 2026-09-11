@@ -35,7 +35,7 @@ dependencies = [
 [project.urls]
 Homepage = "https://github.com/sachncs/factorise"
 Repository = "https://github.com/sachncs/factorise"
-Documentation = "https://github.com/sachncs/factorise/tree/master/docs"
+Documentation = "https://sachncs.github.io/factorise/"
 "Bug Tracker" = "https://github.com/sachncs/factorise/issues"
 Changelog = "https://github.com/sachncs/factorise/blob/master/CHANGELOG.md"
 
