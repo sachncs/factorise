@@ -30,7 +30,7 @@ from factorise.pipeline import FactorStage
 from factorise.pipeline import StageResult
 from factorise.pipeline import StageStatus
 
-__version__ = "0.5.2"
+__version__ = "0.7.4"
 __all__ = [
     "AlgorithmConfig",
     "FactorStage",

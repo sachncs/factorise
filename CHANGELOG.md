@@ -20,6 +20,13 @@ commit and its commit timestamp.
   `sachncs/factorise` across `README.md`, `CONTRIBUTING.md`, `docs/`,
   `pyproject.toml`, `mkdocs.yml`, and issue templates.
 
+## [0.7.4] - 2026-09-11
+
+### Fixed
+- `__version__` aligned with the documented release history (previously
+  stuck at `0.5.2` despite CHANGELOG entries up to `0.7.3`). The next
+  PyPI release will publish the version the project has documented.
+
 ## [0.7.3] - 2026-06-20 — `e869453`
 
 ### Added
