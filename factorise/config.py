@@ -346,7 +346,7 @@ class HybridConfig(AlgorithmConfig):
 
     stage_order: tuple[str, ...] = (
         "trial_division",
-        "pollard_pminus1",
+        "improved_pollard_pminus1",
         "pollard_rho",
         "ecm",
         "siqs",
