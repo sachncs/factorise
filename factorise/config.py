@@ -368,6 +368,44 @@ class HybridConfig(AlgorithmConfig):
         self._validate_siqs()
         self._validate_gnfs()
 
+    @classmethod
+    def from_env(cls) -> HybridConfig:
+        """Build a HybridConfig from FACTORISE_* environment variables.
+
+        Returns:
+            A HybridConfig populated from the environment.
+
+        Raises:
+            ValueError: If any environment variable holds an invalid value.
+
+        """
+        seed = os.getenv("FACTORISE_SEED")
+        return cls(
+            trial_division_bound=env_int("FACTORISE_TRIAL_DIVISION_BOUND",
+                                         "10000"),
+            pm1_smoothness_bounds=(
+                env_int("FACTORISE_PM1_BOUND", str(DEFAULT_PM1_BOUND)),),
+            pm1_trial_bases=tuple(int(b) for b in os.getenv(
+                "FACTORISE_PM1_BASES", "2,3,5,7,11").split(",")),
+            rho_max_retries=env_int("FACTORISE_MAX_RETRIES", "20"),
+            rho_max_iterations=env_int("FACTORISE_MAX_ITERATIONS",
+                                        "10000000"),
+            rho_batch_size=env_int("FACTORISE_BATCH_SIZE", "128"),
+            ecm_first_pass_curves=env_int("FACTORISE_ECM_CURVES", "20"),
+            ecm_first_pass_bound=env_int("FACTORISE_ECM_FIRST_PASS_BOUND",
+                                          str(ECM_FIRST_PASS_BOUND)),
+            ecm_second_pass_curves=env_int("FACTORISE_ECM_SECOND_PASS_CURVES",
+                                            str(ECM_SECOND_PASS_CURVES)),
+            ecm_second_pass_bound=env_int("FACTORISE_ECM_SECOND_PASS_BOUND",
+                                           str(ECM_SECOND_PASS_BOUND)),
+            siqs_max_bit_length=env_int("FACTORISE_SIQS_MAX_BIT_LENGTH",
+                                        str(SIQS_MAX_BIT_LENGTH)),
+            gnfs_timeout_seconds=env_int("FACTORISE_GNFS_TIMEOUT", "600"),
+            gnfs_external_tool_name=os.getenv("FACTORISE_GNFS_BINARY",
+                                              "msieve"),
+            seed=int(seed) if seed is not None else None,
+        )
+
     def _validate_trial_division(self) -> None:
         """Validate trial division bound and prime count.
 
