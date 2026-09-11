@@ -73,7 +73,8 @@ class HybridFactorisationEngine:
             second_pass_bound=self.config.ecm_second_pass_bound,
         )
         self.siqs_stage = SIQSStage(
-            max_bit_length=self.config.siqs_max_bit_length,)
+            max_bit_length=self.config.siqs_max_bit_length,
+        )
         self.rho_stage = PollardRhoStage(
             max_retries=self.config.rho_max_retries,
             max_iterations=self.config.rho_max_iterations,
@@ -131,8 +132,9 @@ class HybridFactorisationEngine:
             )
         return None
 
-    def try_perfect_power(self, abs_n: int,
-                          sign: int) -> FactorisationResult | None:
+    def try_perfect_power(
+        self, abs_n: int, sign: int
+    ) -> FactorisationResult | None:
         """Return a result if abs_n is a perfect power, or None."""
         if not self.config.perfect_power_check:
             return None
@@ -171,8 +173,9 @@ class HybridFactorisationEngine:
             is_prime=False,
         )
 
-    def result_for_prime(self, n: int, sign: int,
-                         abs_n: int) -> FactorisationResult:
+    def result_for_prime(
+        self, n: int, sign: int, abs_n: int
+    ) -> FactorisationResult:
         """Return a result when abs_n is known to be prime."""
         return FactorisationResult(
             original=n,
@@ -201,8 +204,10 @@ class HybridFactorisationEngine:
             if stage is None:
                 continue
             result = stage.attempt(n)
-            if (result.status is StageStatus.SUCCESS and
-                    result.factor is not None):
+            if (
+                result.status is StageStatus.SUCCESS
+                and result.factor is not None
+            ):
                 LOGGER.debug(
                     "select_algorithm n=%d stage=%s factor=%d elapsed_ms=%.2f",
                     n,
@@ -271,18 +276,27 @@ class HybridFactorisationEngine:
         # Preserve exact handling order: zero -> unit -> two -> perfect power
         # -> primality -> Carmichael log -> even -> stack loop.
         if (result := self.try_zero(n)) is not None:
-            LOGGER.info("hybrid_complete n=%d result=zero elapsed_ms=%.3f", n,
-                        elapsed_ms(start))
+            LOGGER.info(
+                "hybrid_complete n=%d result=zero elapsed_ms=%.3f",
+                n,
+                elapsed_ms(start),
+            )
             return result
 
         if (result := self.try_unit(n)) is not None:
-            LOGGER.info("hybrid_complete n=%d result=unit elapsed_ms=%.3f", n,
-                        elapsed_ms(start))
+            LOGGER.info(
+                "hybrid_complete n=%d result=unit elapsed_ms=%.3f",
+                n,
+                elapsed_ms(start),
+            )
             return result
 
         if (result := self.try_two(n)) is not None:
-            LOGGER.info("hybrid_complete n=%d result=two elapsed_ms=%.3f", n,
-                        elapsed_ms(start))
+            LOGGER.info(
+                "hybrid_complete n=%d result=two elapsed_ms=%.3f",
+                n,
+                elapsed_ms(start),
+            )
             return result
 
         sign = -1 if n < 0 else 1
@@ -290,14 +304,19 @@ class HybridFactorisationEngine:
 
         if (result := self.try_perfect_power(abs_n, sign)) is not None:
             LOGGER.info(
-                "hybrid_complete n=%d result=perfect_power elapsed_ms=%.3f", n,
-                elapsed_ms(start))
+                "hybrid_complete n=%d result=perfect_power elapsed_ms=%.3f",
+                n,
+                elapsed_ms(start),
+            )
             return result
 
         if is_prime(abs_n):
             result = self.result_for_prime(n, sign, abs_n)
-            LOGGER.info("hybrid_complete n=%d result=prime elapsed_ms=%.3f", n,
-                        elapsed_ms(start))
+            LOGGER.info(
+                "hybrid_complete n=%d result=prime elapsed_ms=%.3f",
+                n,
+                elapsed_ms(start),
+            )
             return result
 
         if self.config.carmichael_check and has_carmichael_property(abs_n):
@@ -317,8 +336,11 @@ class HybridFactorisationEngine:
             )
 
         if (result := self.try_even(abs_n, sign)) is not None:
-            LOGGER.info("hybrid_complete n=%d result=even elapsed_ms=%.3f", n,
-                        elapsed_ms(start))
+            LOGGER.info(
+                "hybrid_complete n=%d result=even elapsed_ms=%.3f",
+                n,
+                elapsed_ms(start),
+            )
             return result
 
         factors, powers = self.factorise_stack(abs_n)

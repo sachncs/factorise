@@ -1227,7 +1227,8 @@ def ensure_integer_input(value: object, name: str = "n") -> None:
     """
     if isinstance(value, bool) or not isinstance(value, int):
         raise TypeError(
-            f"{name} must be a plain int, got {type(value).__name__!r}")
+            f"{name} must be a plain int, got {type(value).__name__!r}"
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -1255,24 +1256,30 @@ def is_prime(n: int) -> bool:
     start = time.monotonic()
 
     if n < 2:
-        LOGGER.debug("is_prime n=%d result=False elapsed_ms=%.3f", n,
-                     elapsed_ms(start))
+        LOGGER.debug(
+            "is_prime n=%d result=False elapsed_ms=%.3f", n, elapsed_ms(start)
+        )
         return False
     if n in DETERMINISTIC_WITNESSES_SET:
-        LOGGER.debug("is_prime n=%d result=True elapsed_ms=%.3f", n,
-                     elapsed_ms(start))
+        LOGGER.debug(
+            "is_prime n=%d result=True elapsed_ms=%.3f", n, elapsed_ms(start)
+        )
         return True
     if n % 2 == 0 or n % 3 == 0:
-        LOGGER.debug("is_prime n=%d result=False elapsed_ms=%.3f", n,
-                     elapsed_ms(start))
+        LOGGER.debug(
+            "is_prime n=%d result=False elapsed_ms=%.3f", n, elapsed_ms(start)
+        )
         return False
 
     m = n - 1
     s = (m & -m).bit_length() - 1
     d = m >> s
 
-    witnesses = (SMALL_INPUT_WITNESSES if n.bit_length()
-                 <= SMALL_INPUT_BIT_BOUND else DETERMINISTIC_WITNESSES)
+    witnesses = (
+        SMALL_INPUT_WITNESSES
+        if n.bit_length() <= SMALL_INPUT_BIT_BOUND
+        else DETERMINISTIC_WITNESSES
+    )
     for a in witnesses:
         x = pow(a, d, n)
         if x in (1, n - 1):
@@ -1282,12 +1289,16 @@ def is_prime(n: int) -> bool:
             if x == n - 1:
                 break
         else:
-            LOGGER.debug("is_prime n=%d result=False elapsed_ms=%.3f", n,
-                         elapsed_ms(start))
+            LOGGER.debug(
+                "is_prime n=%d result=False elapsed_ms=%.3f",
+                n,
+                elapsed_ms(start),
+            )
             return False
 
-    LOGGER.debug("is_prime n=%d result=True elapsed_ms=%.3f", n,
-                 elapsed_ms(start))
+    LOGGER.debug(
+        "is_prime n=%d result=True elapsed_ms=%.3f", n, elapsed_ms(start)
+    )
     return True
 
 
@@ -1438,16 +1449,20 @@ class BrentPollardCycleResult:
         self.factor = factor
 
     def __repr__(self) -> str:
-        return (f"BrentPollardCycleResult(outcome={self.outcome!r}, "
-                f"iterations_used={self.iterations_used!r}, "
-                f"factor={self.factor!r})")
+        return (
+            f"BrentPollardCycleResult(outcome={self.outcome!r}, "
+            f"iterations_used={self.iterations_used!r}, "
+            f"factor={self.factor!r})"
+        )
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, BrentPollardCycleResult):
             return NotImplemented
-        return (self.outcome == other.outcome and
-                self.iterations_used == other.iterations_used and
-                self.factor == other.factor)
+        return (
+            self.outcome == other.outcome
+            and self.iterations_used == other.iterations_used
+            and self.factor == other.factor
+        )
 
     def __hash__(self) -> int:
         return hash((self.outcome, self.iterations_used, self.factor))
@@ -1526,7 +1541,8 @@ def execute_brent_pollard_cycle(
     ensure_integer_input(n)
     if not isinstance(config, FactoriserConfig):
         raise TypeError(
-            f"config must be FactoriserConfig, got {type(config).__name__!r}")
+            f"config must be FactoriserConfig, got {type(config).__name__!r}"
+        )
 
     start = time.monotonic()
     g, r, q = 1, 1, 1
@@ -1540,8 +1556,9 @@ def execute_brent_pollard_cycle(
 
         k = 0
         while k < r and g == 1:
-            batch_limit = compute_batch_limit(config, r, k, iterations,
-                                              max_iterations)
+            batch_limit = compute_batch_limit(
+                config, r, k, iterations, max_iterations
+            )
             if batch_limit <= 0:
                 LOGGER.warning("iteration_cap n=%d limit=%d", n, max_iterations)
                 LOGGER.debug(
@@ -1556,7 +1573,8 @@ def execute_brent_pollard_cycle(
                 )
 
             y, q, y_history, g, batch_iters = run_brent_batch(
-                n, x, y, c, q, batch_limit)
+                n, x, y, c, q, batch_limit
+            )
             iterations += batch_iters
             k += config.batch_size
         r *= 2
@@ -1649,7 +1667,8 @@ def find_nontrivial_factor_pollard_brent(
     ensure_integer_input(n)
     if not isinstance(config, FactoriserConfig):
         raise TypeError(
-            f"config must be FactoriserConfig, got {type(config).__name__!r}")
+            f"config must be FactoriserConfig, got {type(config).__name__!r}"
+        )
 
     start = time.monotonic()
 
@@ -1683,8 +1702,9 @@ def find_nontrivial_factor_pollard_brent(
         rng = random.Random(base_seed + attempt)
         y = rng.randint(1, n - 1)
         c = rng.randint(1, n - 1)
-        LOGGER.debug("pollard_brent_attempt n=%d attempt=%d y=%d c=%d", n,
-                     attempt, y, c)
+        LOGGER.debug(
+            "pollard_brent_attempt n=%d attempt=%d y=%d c=%d", n, attempt, y, c
+        )
 
         result = execute_brent_pollard_cycle(
             n,
@@ -1709,14 +1729,17 @@ def find_nontrivial_factor_pollard_brent(
             )
             return result.factor
 
-        if (remaining_iterations <= 0 or
-                result.outcome == PollardBrentOutcome.ITERATION_CAP_HIT):
+        if (
+            remaining_iterations <= 0
+            or result.outcome == PollardBrentOutcome.ITERATION_CAP_HIT
+        ):
             LOGGER.error("iteration_cap n=%d attempts=%d", n, attempt)
             break
 
     raise FactorisationError(
         f"find_nontrivial_factor_pollard_brent failed for n={n} "
-        f"after {attempt} attempts. Increase max_retries or max_iterations.")
+        f"after {attempt} attempts. Increase max_retries or max_iterations."
+    )
 
 
 # ---------------------------------------------------------------------------
@@ -1770,7 +1793,8 @@ def collect_prime_factors(n: int, config: FactoriserConfig) -> list[int]:
     ensure_integer_input(n)
     if not isinstance(config, FactoriserConfig):
         raise TypeError(
-            f"config must be FactoriserConfig, got {type(config).__name__!r}")
+            f"config must be FactoriserConfig, got {type(config).__name__!r}"
+        )
 
     start = time.monotonic()
     factors = list(yield_prime_factors_recursive(n, config))
@@ -1792,7 +1816,8 @@ def resolve_config(config: FactoriserConfig | None) -> FactoriserConfig:
     """Return a concrete FactoriserConfig, loading from env if None."""
     if config is not None and not isinstance(config, FactoriserConfig):
         raise TypeError(
-            f"config must be FactoriserConfig, got {type(config).__name__!r}")
+            f"config must be FactoriserConfig, got {type(config).__name__!r}"
+        )
     return config if config is not None else FactoriserConfig.from_env()
 
 
@@ -1818,14 +1843,14 @@ def result_for_unit(n: int, sign: int) -> FactorisationResult:
     )
 
 
-def assemble_result(n: int, sign: int,
-                    raw_factors: list[int]) -> FactorisationResult:
+def assemble_result(
+    n: int, sign: int, raw_factors: list[int]
+) -> FactorisationResult:
     """Build a FactorisationResult from a flat list of prime factors."""
     counts = Counter(raw_factors)
     factors = sorted(counts.keys())
     powers = {prime: counts[prime] for prime in factors}
-    is_prime_result = (len(factors) == 1 and sum(powers.values()) == 1 and
-                       n > 1)
+    is_prime_result = len(factors) == 1 and sum(powers.values()) == 1 and n > 1
     return FactorisationResult(
         original=n,
         sign=sign,
@@ -1866,16 +1891,22 @@ def factorise(
     LOGGER.info("factorise_start n=%d", n)
 
     if n == 0:
-        LOGGER.info("factorise_complete n=%d factors=[] elapsed_ms=%.3f", n,
-                    elapsed_ms(start))
+        LOGGER.info(
+            "factorise_complete n=%d factors=[] elapsed_ms=%.3f",
+            n,
+            elapsed_ms(start),
+        )
         return result_for_zero()
 
     sign = -1 if n < 0 else 1
     abs_n = abs(n)
 
     if abs_n == 1:
-        LOGGER.info("factorise_complete n=%d factors=[] elapsed_ms=%.3f", n,
-                    elapsed_ms(start))
+        LOGGER.info(
+            "factorise_complete n=%d factors=[] elapsed_ms=%.3f",
+            n,
+            elapsed_ms(start),
+        )
         return result_for_unit(n, sign)
 
     raw_factors = collect_prime_factors(abs_n, cfg)

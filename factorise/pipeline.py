@@ -80,9 +80,12 @@ class StageResult:
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, StageResult):
             return NotImplemented
-        return (self.stage_name == other.stage_name and
-                self.status == other.status and self.factor == other.factor and
-                self.reason == other.reason)
+        return (
+            self.stage_name == other.stage_name
+            and self.status == other.status
+            and self.factor == other.factor
+            and self.reason == other.reason
+        )
 
     def __hash__(self) -> int:
         return hash((self.stage_name, self.status, self.factor, self.reason))
@@ -165,7 +168,8 @@ class FactorisationPipeline:
                 )
             elif name == "pollard_pminus1":
                 stages[name] = ImprovedPollardPMinusOneStage(
-                    bounds=(self._config.pm1_bound,),)
+                    bounds=(self._config.pm1_bound,),
+                )
             elif name == "pollard_rho":
                 stages[name] = PollardRhoStage(
                     max_retries=self._config.max_retries,
@@ -175,12 +179,14 @@ class FactorisationPipeline:
                 )
             elif name == "ecm":
                 from factorise.stages.ecm import ECMStage
+
                 stages[name] = ECMStage(
                     curves=self._config.ecm_curves,
                     bound=self._config.bound_medium,
                 )
             elif name == "quadratic_sieve":
                 from factorise.stages.quadratic_sieve import QuadraticSieveStage
+
                 stages[name] = QuadraticSieveStage()
             elif name == "gnfs":
                 stages[name] = GNFSStage()
@@ -247,8 +253,10 @@ class FactorisationPipeline:
                 result.elapsed_ms,
             )
 
-            if (result.status is StageStatus.SUCCESS and
-                    result.factor is not None):
+            if (
+                result.status is StageStatus.SUCCESS
+                and result.factor is not None
+            ):
                 return StageResult(
                     stage_name="pipeline",
                     status=StageStatus.SUCCESS,
@@ -260,7 +268,8 @@ class FactorisationPipeline:
             if result.status is not StageStatus.SKIPPED:
                 failures.append(
                     f"{stage_name}({result.status.value}): "
-                    f"{result.reason or 'unknown'}",)
+                    f"{result.reason or 'unknown'}",
+                )
 
         return StageResult(
             stage_name="pipeline",
@@ -322,8 +331,10 @@ def yield_prime_factors_via_pipeline(
             except FactorisationError as exc:
                 raise FactorisationError(
                     f"All stages failed for n={current}; "
-                    "input may be prime or require GNFS",) from exc
+                    "input may be prime or require GNFS",
+                ) from exc
         else:
             raise FactorisationError(
                 f"Pipeline returned unexpected status {result.status} "
-                f"for composite n={current}",)
+                f"for composite n={current}",
+            )

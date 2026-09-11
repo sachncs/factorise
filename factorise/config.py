@@ -176,16 +176,18 @@ class AlgorithmConfig:
             ValueError: If any field is outside its allowed range.
 
         """
-        validate_int_range("batch_size", self.batch_size, BATCH_SIZE_MIN,
-                           BATCH_SIZE_MAX)
+        validate_int_range(
+            "batch_size", self.batch_size, BATCH_SIZE_MIN, BATCH_SIZE_MAX
+        )
         validate_int_range(
             "max_iterations",
             self.max_iterations,
             MAX_ITERATIONS_MIN,
             MAX_ITERATIONS_MAX,
         )
-        validate_int_range("max_retries", self.max_retries, MAX_RETRIES_MIN,
-                           MAX_RETRIES_MAX)
+        validate_int_range(
+            "max_retries", self.max_retries, MAX_RETRIES_MIN, MAX_RETRIES_MAX
+        )
 
 
 # ---------------------------------------------------------------------------
@@ -289,16 +291,21 @@ class PipelineConfig(AlgorithmConfig):
         """
         seed = os.getenv("FACTORISE_SEED")
         return cls(
-            bound_small=env_int("FACTORISE_BOUND_SMALL",
-                                str(DEFAULT_BOUND_SMALL)),
-            bound_medium=env_int("FACTORISE_BOUND_MEDIUM",
-                                 str(DEFAULT_BOUND_MEDIUM)),
-            bound_large=env_int("FACTORISE_BOUND_LARGE",
-                                str(DEFAULT_BOUND_LARGE)),
-            bound_xlarge=env_int("FACTORISE_BOUND_XLARGE",
-                                 str(DEFAULT_BOUND_XLARGE)),
-            trial_division_bound=env_int("FACTORISE_TRIAL_DIVISION_BOUND",
-                                         "10000"),
+            bound_small=env_int(
+                "FACTORISE_BOUND_SMALL", str(DEFAULT_BOUND_SMALL)
+            ),
+            bound_medium=env_int(
+                "FACTORISE_BOUND_MEDIUM", str(DEFAULT_BOUND_MEDIUM)
+            ),
+            bound_large=env_int(
+                "FACTORISE_BOUND_LARGE", str(DEFAULT_BOUND_LARGE)
+            ),
+            bound_xlarge=env_int(
+                "FACTORISE_BOUND_XLARGE", str(DEFAULT_BOUND_XLARGE)
+            ),
+            trial_division_bound=env_int(
+                "FACTORISE_TRIAL_DIVISION_BOUND", "10000"
+            ),
             pm1_bound=env_int("FACTORISE_PM1_BOUND", str(DEFAULT_PM1_BOUND)),
             ecm_curves=env_int("FACTORISE_ECM_CURVES", str(DEFAULT_ECM_CURVES)),
             gnfs_timeout=env_int(
@@ -386,28 +393,38 @@ class HybridConfig(AlgorithmConfig):
         """
         seed = os.getenv("FACTORISE_SEED")
         return cls(
-            trial_division_bound=env_int("FACTORISE_TRIAL_DIVISION_BOUND",
-                                         "10000"),
+            trial_division_bound=env_int(
+                "FACTORISE_TRIAL_DIVISION_BOUND", "10000"
+            ),
             pm1_smoothness_bounds=(
-                env_int("FACTORISE_PM1_BOUND", str(DEFAULT_PM1_BOUND)),),
-            pm1_trial_bases=tuple(int(b) for b in os.getenv(
-                "FACTORISE_PM1_BASES", "2,3,5,7,11").split(",")),
+                env_int("FACTORISE_PM1_BOUND", str(DEFAULT_PM1_BOUND)),
+            ),
+            pm1_trial_bases=tuple(
+                int(b)
+                for b in os.getenv("FACTORISE_PM1_BASES", "2,3,5,7,11").split(
+                    ","
+                )
+            ),
             rho_max_retries=env_int("FACTORISE_MAX_RETRIES", "20"),
-            rho_max_iterations=env_int("FACTORISE_MAX_ITERATIONS",
-                                        "10000000"),
+            rho_max_iterations=env_int("FACTORISE_MAX_ITERATIONS", "10000000"),
             rho_batch_size=env_int("FACTORISE_BATCH_SIZE", "128"),
             ecm_first_pass_curves=env_int("FACTORISE_ECM_CURVES", "20"),
-            ecm_first_pass_bound=env_int("FACTORISE_ECM_FIRST_PASS_BOUND",
-                                          str(ECM_FIRST_PASS_BOUND)),
-            ecm_second_pass_curves=env_int("FACTORISE_ECM_SECOND_PASS_CURVES",
-                                            str(ECM_SECOND_PASS_CURVES)),
-            ecm_second_pass_bound=env_int("FACTORISE_ECM_SECOND_PASS_BOUND",
-                                           str(ECM_SECOND_PASS_BOUND)),
-            siqs_max_bit_length=env_int("FACTORISE_SIQS_MAX_BIT_LENGTH",
-                                        str(SIQS_MAX_BIT_LENGTH)),
+            ecm_first_pass_bound=env_int(
+                "FACTORISE_ECM_FIRST_PASS_BOUND", str(ECM_FIRST_PASS_BOUND)
+            ),
+            ecm_second_pass_curves=env_int(
+                "FACTORISE_ECM_SECOND_PASS_CURVES", str(ECM_SECOND_PASS_CURVES)
+            ),
+            ecm_second_pass_bound=env_int(
+                "FACTORISE_ECM_SECOND_PASS_BOUND", str(ECM_SECOND_PASS_BOUND)
+            ),
+            siqs_max_bit_length=env_int(
+                "FACTORISE_SIQS_MAX_BIT_LENGTH", str(SIQS_MAX_BIT_LENGTH)
+            ),
             gnfs_timeout_seconds=env_int("FACTORISE_GNFS_TIMEOUT", "600"),
-            gnfs_external_tool_name=os.getenv("FACTORISE_GNFS_BINARY",
-                                              "msieve"),
+            gnfs_external_tool_name=os.getenv(
+                "FACTORISE_GNFS_BINARY", "msieve"
+            ),
             seed=int(seed) if seed is not None else None,
         )
 
@@ -446,7 +463,8 @@ class HybridConfig(AlgorithmConfig):
             if bound < PM1_SMOOTHNESS_BOUND_MIN:
                 raise ValueError(
                     f"each pm1_smoothness_bound must be >= {PM1_SMOOTHNESS_BOUND_MIN}, "
-                    f"got {bound}")
+                    f"got {bound}"
+                )
         for base in self.pm1_trial_bases:
             if base < PM1_TRIAL_BASE_MIN:
                 raise ValueError(
@@ -514,7 +532,8 @@ class HybridConfig(AlgorithmConfig):
         if self.ecm_second_pass_bound <= self.ecm_first_pass_bound:
             raise ValueError(
                 f"ecm_second_pass_bound ({self.ecm_second_pass_bound}) must be > "
-                f"ecm_first_pass_bound ({self.ecm_first_pass_bound})")
+                f"ecm_first_pass_bound ({self.ecm_first_pass_bound})"
+            )
 
     def _validate_siqs(self) -> None:
         """Validate the SIQS maximum bit length.

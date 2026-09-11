@@ -82,8 +82,10 @@ def display_factors(result: FactorisationResult, *, verbose: bool) -> None:
         print(f"  {ansi('2', 'Full expression:')} {result.expression()}\n")
 
 
-def configure_logging(log_level: str, log_format: str = DEFAULT_LOG_FORMAT,
-                       ) -> None:
+def configure_logging(
+    log_level: str,
+    log_format: str = DEFAULT_LOG_FORMAT,
+) -> None:
     """Configure the global logger formatting and verbosity."""
     level = getattr(logging, log_level.upper(), None)
     if not isinstance(level, int):
