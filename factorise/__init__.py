@@ -16,6 +16,7 @@ from factorise.config import AlgorithmConfig
 from factorise.config import FactoriserConfig
 from factorise.config import HybridConfig
 from factorise.config import HybridFactorisationState
+from factorise.config import PipelineConfig
 from factorise.core import FactorisationError
 from factorise.core import FactorisationResult
 from factorise.core import PerfectPowerResult
@@ -27,6 +28,7 @@ from factorise.core import is_prime
 from factorise.hybrid import HybridFactorisationEngine
 from factorise.hybrid import hybrid_factorise
 from factorise.pipeline import FactorStage
+from factorise.pipeline import FactorisationPipeline
 from factorise.pipeline import StageResult
 from factorise.pipeline import StageStatus
 
@@ -35,12 +37,14 @@ __all__ = [
     "AlgorithmConfig",
     "FactorStage",
     "FactorisationError",
+    "FactorisationPipeline",
     "FactorisationResult",
     "FactoriserConfig",
     "HybridConfig",
     "HybridFactorisationEngine",
     "HybridFactorisationState",
     "PerfectPowerResult",
+    "PipelineConfig",
     "StageResult",
     "StageStatus",
     "ensure_integer_input",
