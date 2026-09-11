@@ -576,9 +576,9 @@ class TestGNFSStage:
 
     def test_gnfs_stage_not_available(self) -> None:
         """GNFS stage may succeed via pure Python when binary is not on PATH."""
-        from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+        from factorise.stages.gnfs_optimized import GNFSStage
 
-        stage = OptimizedGNFSStage()
+        stage = GNFSStage()
         result = stage.attempt(10**30)
         # Without an external binary, the composite stage falls back to pure
         # Python GNFS which may succeed or fail depending on the input.
@@ -586,9 +586,9 @@ class TestGNFSStage:
 
     def test_gnfs_stage_small_input_skipped(self) -> None:
         """GNFS stage should skip very small inputs."""
-        from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+        from factorise.stages.gnfs_optimized import GNFSStage
 
-        stage = OptimizedGNFSStage()
+        stage = GNFSStage()
         result = stage.attempt(12)
         assert result.status is StageStatus.SKIPPED
 

@@ -6,7 +6,7 @@ GNFS is the most efficient known classical algorithm for factoring large integer
 
 This package provides two GNFS implementations:
 
-1. **Pure Python** (`OptimizedGNFSStage`): Single-polynomial GNFS with lattice sieving,
+1. **Pure Python** (`GNFSStage`): Single-polynomial GNFS with lattice sieving,
    practical for inputs in the 60-100 bit range with careful parameter tuning.
 2. **External Tool Adapter** (`ExternalGNFSStage`): Wraps `msieve` or `CADO-NFS`
    for 80-500+ bit inputs.
@@ -31,9 +31,9 @@ external binary if available.
 ## Pure Python Usage
 
 ```python
-from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+from factorise.stages.gnfs_optimized import GNFSStage
 
-stage = OptimizedGNFSStage()
+stage = GNFSStage()
 result = stage.attempt(1234567890123456789 * 9876543210987654321)
 print(result.factor)  # found a factor
 ```

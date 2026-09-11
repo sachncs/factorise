@@ -116,9 +116,9 @@ GNFS with lattice sieving and proper rational + algebraic factor bases.  For
 very large inputs an external GNFS tool (msieve, CADO-NFS) is required.
 
 ```python
-from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+from factorise.stages.gnfs_optimized import GNFSStage
 
-stage = OptimizedGNFSStage()
+stage = GNFSStage()
 result = stage.attempt(12345)
 ```
 

@@ -27,7 +27,7 @@ from factorise.pipeline import yield_prime_factors_via_pipeline
 from factorise.stages.ecm import ECMStage
 from factorise.stages.ecm_shared import EllipticCurveOperations
 from factorise.stages.ecm_two_pass import TwoPassECMStage
-from factorise.stages.gnfs_optimized import OptimizedGNFSStage
+from factorise.stages.gnfs_optimized import GNFSStage
 from factorise.stages.gnfs_optimized import select_polynomial
 from factorise.stages.gnfs_optimized import sqrt_mod_prime
 from factorise.stages.improved_pm1 import ImprovedPollardPMinusOneStage
@@ -401,7 +401,7 @@ def test_select_polynomial_m_lt_2() -> None:
 
 def test_gnfs_attempt_is_prime() -> None:
     """Verify GNFS skips prime inputs."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     # Use a prime in the 60-128 bit range
     p = (1 << 61) - 1  # Mersenne prime
     result = stage.attempt(p)
@@ -411,7 +411,7 @@ def test_gnfs_attempt_is_prime() -> None:
 
 def test_gnfs_attempt_failure() -> None:
     """Verify GNFS can return FAILURE."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     # Very small input that isn't prime and isn't a perfect square
     result = stage.attempt(15)
     assert result.status in (StageStatus.SUCCESS, StageStatus.SKIPPED)
@@ -419,14 +419,14 @@ def test_gnfs_attempt_failure() -> None:
 
 def test_gnfs_auto_scale_above_128_bits() -> None:
     """Verify __auto_scale returns (0,0,0) above 128 bits."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     auto = getattr(stage, "_GNFSStage__auto_scale")(200)
     assert auto == (0, 0, 0)
 
 
 def test_gnfs_find_factor_bound_zero() -> None:
     """Verify __find_factor returns None when auto_scale gives (0,0,0)."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     # Monkey-patch auto_scale to return zeros
     original = getattr(stage, "_GNFSStage__auto_scale")
     setattr(stage, "_GNFSStage__auto_scale", lambda _bit_len: (0, 0, 0))
@@ -439,7 +439,7 @@ def test_gnfs_find_factor_bound_zero() -> None:
 
 def test_gnfs_find_factor_attempt_gt_0() -> None:
     """Verify __find_factor with attempt > 0 path."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     original_attempts = getattr(stage, "_GNFSStage__max_attempts")
     setattr(stage, "_GNFSStage__max_attempts", 2)
     try:
@@ -452,7 +452,7 @@ def test_gnfs_find_factor_attempt_gt_0() -> None:
 
 def test_gnfs_find_factor_relations_lt_num_cols() -> None:
     """Verify __find_factor returns None when relations < num_cols."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     # Force tiny parameters so no relations are found
     original_auto = getattr(stage, "_GNFSStage__auto_scale")
     setattr(stage, "_GNFSStage__auto_scale", lambda _bit_len: (2, 2, 2))
@@ -465,7 +465,7 @@ def test_gnfs_find_factor_relations_lt_num_cols() -> None:
 
 def test_gnfs_find_factor_dependency_none() -> None:
     """Verify __find_factor returns None when dependency is None."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     original_find_dep = getattr(stage, "_GNFSStage__find_dependency")
     setattr(stage, "_GNFSStage__find_dependency", lambda _rels, _cols: None)
     try:
@@ -477,7 +477,7 @@ def test_gnfs_find_factor_dependency_none() -> None:
 
 def test_gnfs_lattice_sieve_p_equals_2() -> None:
     """Verify __lattice_sieve skips p == 2."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     relations = getattr(stage, "_GNFSStage__lattice_sieve")(
         91,
         4,
@@ -492,7 +492,7 @@ def test_gnfs_lattice_sieve_p_equals_2() -> None:
 
 def test_gnfs_lattice_sieve_roots_none() -> None:
     """Verify __lattice_sieve skips primes with no roots."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     relations = getattr(stage, "_GNFSStage__lattice_sieve")(
         91,
         4,
@@ -507,7 +507,7 @@ def test_gnfs_lattice_sieve_roots_none() -> None:
 
 def test_gnfs_lattice_sieve_r_zero() -> None:
     """Verify __lattice_sieve skips r == 0."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     relations = getattr(stage, "_GNFSStage__lattice_sieve")(
         91,
         4,
@@ -522,7 +522,7 @@ def test_gnfs_lattice_sieve_r_zero() -> None:
 
 def test_gnfs_lattice_sieve_append_relation() -> None:
     """Verify __lattice_sieve appends relations."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     relations = getattr(stage, "_GNFSStage__lattice_sieve")(
         91,
         4,
@@ -537,7 +537,7 @@ def test_gnfs_lattice_sieve_append_relation() -> None:
 
 def test_gnfs_lattice_sieve_return_relations() -> None:
     """Verify __lattice_sieve returns relations list."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     relations = getattr(stage, "_GNFSStage__lattice_sieve")(
         91,
         4,
@@ -552,14 +552,14 @@ def test_gnfs_lattice_sieve_return_relations() -> None:
 
 def test_gnfs_find_dependency_relations_lt_num_cols() -> None:
     """Verify __find_dependency returns None when relations < num_cols."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     result = getattr(stage, "_GNFSStage__find_dependency")([], 5)
     assert result is None
 
 
 def test_gnfs_find_dependency_mask_zero() -> None:
     """Verify __find_dependency skips mask == 0."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     rels = [{"exponents": [0, 0, 0]}]
     result = getattr(stage, "_GNFSStage__find_dependency")(rels, 1)
     assert result is None
@@ -567,7 +567,7 @@ def test_gnfs_find_dependency_mask_zero() -> None:
 
 def test_gnfs_find_dependency_rows_lt_num_cols() -> None:
     """Verify __find_dependency returns None when rows < num_cols."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     rels = [{"exponents": [1, 0]}]
     result = getattr(stage, "_GNFSStage__find_dependency")(rels, 5)
     assert result is None
@@ -575,7 +575,7 @@ def test_gnfs_find_dependency_rows_lt_num_cols() -> None:
 
 def test_gnfs_find_dependency_row_idx_break() -> None:
     """Verify __find_dependency breaks when row_idx >= num_rows."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     rels = [{"exponents": [1]}]
     result = getattr(stage, "_GNFSStage__find_dependency")(rels, 1)
     # May or may not find dependency; just ensure no crash
@@ -584,7 +584,7 @@ def test_gnfs_find_dependency_row_idx_break() -> None:
 
 def test_gnfs_find_dependency_return_none() -> None:
     """Verify __find_dependency returns None when no dependency found."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     rels = [{"exponents": [1, 0]}, {"exponents": [0, 1]}]
     result = getattr(stage, "_GNFSStage__find_dependency")(rels, 2)
     assert result is None or isinstance(result, list)
@@ -592,7 +592,7 @@ def test_gnfs_find_dependency_return_none() -> None:
 
 def test_gnfs_extract_factor_rel_idx_oob() -> None:
     """Verify __extract_factor skips out-of-bounds relation indices."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     result = getattr(stage, "_GNFSStage__extract_factor")(
         91,
         4,
@@ -611,7 +611,7 @@ def test_gnfs_extract_factor_rel_idx_oob() -> None:
 
 def test_gnfs_extract_factor_return_none() -> None:
     """Verify __extract_factor returns None when no factor found."""
-    stage = OptimizedGNFSStage()
+    stage = GNFSStage()
     result = getattr(stage, "_GNFSStage__extract_factor")(
         91,
         4,
