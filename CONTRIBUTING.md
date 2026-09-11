@@ -60,6 +60,22 @@ pre-commit install
 
 This will automatically detect Python 3.10+, create a virtual environment, install dependencies, and set up pre-commit hooks.
 
+### Upgrading From a Pre-0.7.0 Install
+
+The console-script wrapper installed by older versions of `factorise`
+referenced a removed entry point (`factorise.cli:app`). `pip install -U`
+does **not** rewrite the wrapper, so existing installs need to be
+uninstalled before upgrading to silence the `ModuleNotFoundError`:
+
+```bash
+pip uninstall -y factorise
+pip install --upgrade factorise
+```
+
+If you use an editable install (`pip install -e ".[dev]"`) alongside a
+sdist install, the editable version takes precedence and the stale
+wrapper is harmless.
+
 ## Branch Naming
 
 Use descriptive branch names with the following prefixes:
