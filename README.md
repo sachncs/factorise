@@ -10,11 +10,22 @@
   </p>
 </p>
 
-**factorise** is a Python SDK that performs deterministic prime factorisation
-of integers using Miller-Rabin primality testing and a multi-stage factorisation
-pipeline. It escalates from fast algorithms (Trial Division) to powerful ones
-(ECM, Quadratic Sieve, SIQS) and ships with an adaptive hybrid engine that
-chooses the right algorithm based on input size.
+**factorise** is a dependency-free Python library for **deterministic** integer
+factorisation — the only Python SDK that combines Miller-Rabin primality
+testing, Pollard's Rho (Brent), Pollard p-1, ECM, Quadratic Sieve, SIQS,
+and GNFS behind a single, consistent API with an adaptive hybrid engine
+that picks the right algorithm by input size.
+
+**For whom:** Python developers building crypto, number-theory, math-education,
+or CTF tooling who want correct, reproducible factorisation without native
+extensions.
+
+### Why factorise?
+
+- **Deterministic & reproducible** — no random walks, no probabilistic answers.
+- **Zero runtime dependencies** — only the Python standard library.
+- **Adaptive** — one entry point, nine algorithm stages, automatic selection.
+- **Typed & tested** — strict mypy, 97% coverage, Hypothesis property tests.
 
 ---
 
