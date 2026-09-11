@@ -302,6 +302,19 @@ class HybridFactorisationEngine:
 
         if self.config.carmichael_check and has_carmichael_property(abs_n):
             LOGGER.info("carmichael_detected n=%d", n)
+            extended_bounds = tuple(
+                int(b * 10) for b in self.config.pm1_smoothness_bounds
+            )
+            self.pm1_stage = ImprovedPollardPMinusOneStage(
+                bounds=extended_bounds,
+                bases=self.config.pm1_trial_bases,
+            )
+            self.stage_map["improved_pollard_pminus1"] = self.pm1_stage
+            LOGGER.info(
+                "carmichael_routing n=%d action=extend_pm1_bounds bounds=%s",
+                n,
+                extended_bounds,
+            )
 
         if (result := self.try_even(abs_n, sign)) is not None:
             LOGGER.info("hybrid_complete n=%d result=even elapsed_ms=%.3f", n,
