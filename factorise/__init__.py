@@ -15,7 +15,6 @@ Example:
 from factorise.config import AlgorithmConfig
 from factorise.config import FactoriserConfig
 from factorise.config import HybridConfig
-from factorise.config import HybridFactorisationState
 from factorise.config import PipelineConfig
 from factorise.core import FactorisationError
 from factorise.core import FactorisationResult
@@ -42,7 +41,6 @@ __all__ = [
     "FactoriserConfig",
     "HybridConfig",
     "HybridFactorisationEngine",
-    "HybridFactorisationState",
     "PerfectPowerResult",
     "PipelineConfig",
     "StageResult",
