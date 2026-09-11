@@ -15,6 +15,7 @@ PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # Define explicit paths relative to root for safety
 TARGET_DIRECTORIES=(
+    ".approval_tests_temp"
     ".benchmarks"
     ".hypothesis"
     ".mypy_cache"

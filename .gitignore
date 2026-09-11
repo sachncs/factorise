@@ -58,6 +58,7 @@ cover/
 .mypy_cache/
 .ruff_cache/
 .benchmarks/
+.approval_tests_temp/
 
 # Environments
 .env
