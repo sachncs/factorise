@@ -58,6 +58,15 @@ cd factorise
 pip install -e ".[dev]"
 ```
 
+> Upgrading from a pre-0.7.0 install? Uninstall first; older console-script
+> wrappers reference a removed entry point and `pip install -U` will not
+> rewrite them:
+>
+> ```bash
+> pip uninstall -y factorise
+> pip install --upgrade factorise
+> ```
+
 ---
 
 ## Quick Start
