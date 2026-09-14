@@ -57,12 +57,6 @@ dev = [
     "pre-commit>=4.1.0",
     "rich>=13.0.0",
 ]
-docs = [
-    "mkdocs>=1.6.0",
-    "mkdocs-material>=9.5.0",
-    "mkdocstrings[python]>=0.24.0",
-    "pymdown-extensions>=10.0.0",
-]
 
 [tool.hatch.version]
 path = "factorise/__init__.py"

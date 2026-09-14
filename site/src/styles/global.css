@@ -1,0 +1,211 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: dark;
+  }
+
+  html, body {
+    overflow-x: clip;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    background-color: #08080a;
+    color: #eeeef0;
+  }
+
+  html.light {
+    color-scheme: light;
+    background-color: #f7f7f8;
+    color: #141417;
+  }
+
+  body {
+    background:
+      radial-gradient(ellipse 120% 60% at 50% 0%, rgba(58,107,255,0.08), transparent 70%),
+      radial-gradient(ellipse 80% 50% at 80% 40%, rgba(99,102,241,0.05), transparent 70%),
+      #08080a;
+    background-attachment: fixed;
+  }
+
+  html.light body {
+    background:
+      radial-gradient(ellipse 120% 60% at 50% 0%, rgba(58,107,255,0.05), transparent 70%),
+      #f7f7f8;
+  }
+
+  body {
+    @apply min-h-screen font-sans antialiased;
+    background-color: inherit;
+    color: inherit;
+    font-feature-settings: 'cv11', 'ss01', 'ss03', 'cv02';
+  }
+
+  ::selection {
+    background-color: rgba(58, 107, 255, 0.35);
+    color: #fff;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+  }
+  html.light ::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.12);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-display tracking-tightest;
+  }
+}
+
+@layer components {
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-6 sm:px-8 lg:px-12;
+  }
+
+  .eyebrow {
+    @apply inline-flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[11px] sm:text-eyebrow font-medium uppercase text-ink-400;
+  }
+
+  .eyebrow-dot {
+    @apply h-1.5 w-1.5 rounded-full bg-accent-500;
+    box-shadow: 0 0 12px rgba(58, 107, 255, 0.7);
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-white px-5 py-2.5 text-sm font-medium text-ink-950 transition-all duration-300 hover:bg-ink-100 hover:shadow-glow active:scale-[0.98];
+  }
+
+  .btn-primary-dark {
+    @apply inline-flex items-center justify-center gap-2 rounded-full bg-ink-950 px-5 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:bg-ink-900 hover:shadow-soft active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-5 py-2.5 text-sm font-medium text-white/90 backdrop-blur-md transition-all duration-300 hover:bg-white/[0.07] hover:border-white/20 active:scale-[0.98];
+  }
+
+  html.light .btn-ghost {
+    @apply border-ink-200 bg-white text-ink-900 hover:bg-ink-50 hover:border-ink-300;
+  }
+
+  .glass {
+    background: linear-gradient(180deg, rgba(255,255,255,0.04) 0%, rgba(255,255,255,0.015) 100%);
+    border: 1px solid rgba(255,255,255,0.06);
+    backdrop-filter: blur(20px) saturate(160%);
+    -webkit-backdrop-filter: blur(20px) saturate(160%);
+  }
+
+  html.light .glass {
+    background: linear-gradient(180deg, rgba(255,255,255,0.7) 0%, rgba(255,255,255,0.5) 100%);
+    border: 1px solid rgba(0,0,0,0.06);
+  }
+
+  .ambient-bg {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(58,107,255,0.10), transparent 50%),
+      radial-gradient(ellipse 60% 40% at 80% 30%, rgba(99,102,241,0.08), transparent 50%),
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(58,107,255,0.06), transparent 50%);
+  }
+
+  html.light .ambient-bg {
+    background-image:
+      radial-gradient(ellipse 80% 50% at 20% 0%, rgba(58,107,255,0.10), transparent 50%),
+      radial-gradient(ellipse 60% 40% at 80% 30%, rgba(99,102,241,0.06), transparent 50%),
+      radial-gradient(ellipse 60% 40% at 50% 100%, rgba(58,107,255,0.04), transparent 50%);
+  }
+
+  .surface {
+    @apply rounded-3xl border border-white/[0.06] bg-white/[0.02] backdrop-blur-md;
+  }
+
+  html.light .surface {
+    @apply border-ink-200 bg-white shadow-soft;
+  }
+
+  .gradient-text {
+    background: linear-gradient(135deg, #ffffff 0%, #b8b8c2 60%, #8eb3ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  html.light .gradient-text {
+    background: linear-gradient(135deg, #141417 0%, #3a3a45 60%, #2a4ff0 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .accent-gradient-text {
+    background: linear-gradient(135deg, #5d8cff 0%, #8eb3ff 50%, #bcd2ff 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .ring-glow {
+    box-shadow:
+      0 0 0 1px rgba(58, 107, 255, 0.3),
+      0 0 24px -4px rgba(58, 107, 255, 0.4),
+      0 30px 60px -20px rgba(58, 107, 255, 0.35);
+  }
+
+  .noise::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    opacity: 0.03;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+  }
+
+  .border-gradient {
+    position: relative;
+  }
+  .border-gradient::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, rgba(58,107,255,0.5), rgba(255,255,255,0.06) 40%, rgba(255,255,255,0.06) 60%, rgba(58,107,255,0.25));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  .mask-fade-b {
+    -webkit-mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+    mask-image: linear-gradient(180deg, #000 60%, transparent 100%);
+  }
+
+  .mask-radial {
+    -webkit-mask-image: radial-gradient(ellipse at center, #000 50%, transparent 80%);
+    mask-image: radial-gradient(ellipse at center, #000 50%, transparent 80%);
+  }
+}

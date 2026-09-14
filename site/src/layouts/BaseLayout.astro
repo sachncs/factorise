@@ -1,0 +1,64 @@
+---
+import '../styles/global.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = 'factorise — Deterministic prime factorisation for Python',
+  description = 'A dependency-free Python library that combines Miller-Rabin, Pollard\'s Rho, ECM, Quadratic Sieve, SIQS, and GNFS behind one adaptive, deterministic API.',
+} = Astro.props;
+---
+<!doctype html>
+<html lang="en" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="generator" content={Astro.generator} />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <meta name="theme-color" content="#0a0a0c" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f7f7f8" media="(prefers-color-scheme: light)" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content="https://sachncs.github.io/factorise/" />
+    <meta property="og:image" content="/og.svg" />
+    <meta property="og:site_name" content="factorise" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content="/og.svg" />
+
+    <link rel="canonical" href="https://sachncs.github.io/factorise/" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <link rel="preconnect" href="https://rsms.me/" />
+    <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+
+    <script is:inline>
+      (function () {
+        const stored = localStorage.getItem('factorise-theme');
+        if (stored === 'light') document.documentElement.classList.add('light');
+        else document.documentElement.classList.remove('light');
+      })();
+    </script>
+  </head>
+  <body>
+    <slot />
+
+    <script>
+      import { initThemeToggle } from '~/lib/theme';
+      initThemeToggle();
+    </script>
+  </body>
+</html>

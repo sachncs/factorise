@@ -1,0 +1,100 @@
+---
+const examples = [
+  {
+    label: '01 · One-liner',
+    code: `from factorise import factorise
+
+result = factorise(123456789)
+print(result.expression())
+# '3^2 * 3607 * 3803'`,
+  },
+  {
+    label: '02 · Pipeline',
+    code: `from factorise import FactorisationPipeline, PipelineConfig
+
+pipeline = FactorisationPipeline(
+    PipelineConfig(trial_division_bound=10_000,
+                   pm1_bound=10**6,
+                   ecm_curves=50)
+)
+result = pipeline.attempt(10**18 + 9)`,
+  },
+  {
+    label: '03 · Hybrid engine',
+    code: `from factorise import (
+    HybridFactorisationEngine, HybridConfig,
+)
+
+engine = HybridFactorisationEngine(HybridConfig())
+# Routes automatically by input size
+result = engine.attempt(n)`,
+  },
+];
+---
+
+<section id="pipeline" class="relative py-24 sm:py-32 lg:py-40">
+  <div aria-hidden class="pointer-events-none absolute inset-0 -z-10">
+    <div class="absolute left-1/2 top-1/2 -z-10 h-[28rem] w-[60rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-accent-500/[0.08] blur-[120px]"></div>
+  </div>
+  <div class="container-page">
+    <div class="grid items-start gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
+      <div class="lg:sticky lg:top-32">
+        <div class="eyebrow mb-5 inline-flex">
+          <span class="eyebrow-dot"></span>
+          <span>Code-first</span>
+        </div>
+        <h2 class="text-display-md font-semibold text-balance">
+          Read like math.
+          <br />
+          <span class="text-ink-400">Write like Python.</span>
+        </h2>
+        <p class="mt-6 max-w-md text-[15px] leading-relaxed text-ink-300">
+          A single, consistent API. Functional when you want it concise,
+          a pipeline when you want control. No surprises.
+        </p>
+
+        <div class="mt-10 space-y-4">
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-emerald-400/10 text-emerald-300">
+              <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+            <div>
+              <div class="text-[14px] font-medium text-white">Result objects</div>
+              <p class="mt-1 text-[13px] text-ink-400">Get <code class="font-mono text-ink-300">.factors</code>, <code class="font-mono text-ink-300">.powers</code> and a printable <code class="font-mono text-ink-300">.expression()</code>.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-emerald-400/10 text-emerald-300">
+              <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+            <div>
+              <div class="text-[14px] font-medium text-white">CLI included</div>
+              <p class="mt-1 text-[13px] text-ink-400"><code class="font-mono text-ink-300">factorise 123456789 --verbose</code> for ops and debugging.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3">
+            <span class="mt-0.5 inline-flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-emerald-400/10 text-emerald-300">
+              <svg viewBox="0 0 24 24" class="h-3.5 w-3.5" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </span>
+            <div>
+              <div class="text-[14px] font-medium text-white">Reproducible</div>
+              <p class="mt-1 text-[13px] text-ink-400">Optional seeding makes Pollard-Brent retries byte-identical.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        {examples.map((ex) => (
+          <div class="overflow-hidden rounded-2xl border border-white/[0.06] bg-ink-950/70 shadow-card backdrop-blur-md">
+            <div class="flex items-center justify-between border-b border-white/[0.05] px-4 py-2.5 text-[11px]">
+              <span class="font-mono text-ink-400">{ex.label}</span>
+              <span class="font-mono text-ink-600">python</span>
+            </div>
+            <pre class="overflow-x-auto px-5 py-5 font-mono text-[13px] leading-[1.85] text-ink-200 sm:px-6 sm:text-[13.5px]"><code>{ex.code}</code></pre>
+          </div>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>

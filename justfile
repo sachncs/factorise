@@ -70,14 +70,14 @@ ci-full: ci security stress-test
 benchmark-ci:
     pytest benchmarks/timing.py --benchmark-only --benchmark-compare --benchmark-compare-fail=min:10% -v
 
-# Build documentation
-docs-build:
-    mkdocs build
+# Build the marketing site
+site-build:
+    cd site && npm ci && npm run build
 
-# Serve documentation locally
-docs-serve:
-    mkdocs serve
+# Run the marketing site dev server
+site-dev:
+    cd site && npm install && npm run dev
 
-# Deploy documentation to GitHub Pages
-docs-deploy:
-    mkdocs gh-deploy
+# Preview the built marketing site
+site-preview:
+    cd site && npm run preview

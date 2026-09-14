@@ -1,0 +1,113 @@
+---
+const algorithms = [
+  {
+    name: 'Miller-Rabin',
+    role: 'Primality test',
+    summary: 'Deterministic below 2⁶⁴. Identifies primes before any factoring work begins.',
+    range: '< 2⁶⁴',
+    cost: 'O(k · log³ n)',
+  },
+  {
+    name: 'Trial Division',
+    role: 'Small factors',
+    summary: 'Strips tiny prime factors first. Bound is configurable; defaults to 10,000.',
+    range: '≤ 10⁴',
+    cost: 'O(√B / log B)',
+  },
+  {
+    name: "Pollard p-1",
+    role: 'Smooth primes',
+    summary: 'Efficient when p-1 is B-smooth. Bound configurable up to millions.',
+    range: 'mid inputs',
+    cost: 'O(B · log B)',
+  },
+  {
+    name: "Pollard's Rho (Brent)",
+    role: 'General purpose',
+    summary: 'Cycle-detection with Brent\'s improvement. The workhorse of mid-size integers.',
+    range: '< 10¹⁸',
+    cost: 'O(n^(1/4))',
+  },
+  {
+    name: 'ECM',
+    role: 'Medium factors',
+    summary: 'Elliptic curves. Tunable curve count. The bridge between Pollard\'s and sieves.',
+    range: '~30 digits',
+    cost: 'sub-exp',
+  },
+  {
+    name: 'Quadratic Sieve',
+    role: 'Large semi-primes',
+    summary: 'Classical sieve. Reliable up to ~70 digits with a tuned relation budget.',
+    range: '< 70 digits',
+    cost: 'L(½)',
+  },
+  {
+    name: 'SIQS',
+    role: 'Self-initializing',
+    summary: 'Knuth-Schroeppel optimised sieve. Faster than QS in practice on typical inputs.',
+    range: '< 80 digits',
+    cost: 'L(½)',
+  },
+  {
+    name: 'GNFS',
+    role: 'Massive inputs',
+    summary: 'Sub-exponential. Adapter shells out to `msieve` for the heaviest workloads.',
+    range: '> 80 digits',
+    cost: 'L(⅓)',
+  },
+];
+---
+
+<section id="algorithms" class="relative py-24 sm:py-32 lg:py-40">
+  <div aria-hidden class="pointer-events-none absolute inset-0 -z-10">
+    <div class="absolute left-1/2 top-0 -z-10 h-96 w-[80rem] -translate-x-1/2 rounded-full bg-accent-500/[0.10] blur-[120px]"></div>
+    <div class="absolute right-0 top-1/3 -z-10 h-72 w-72 rounded-full bg-indigo-500/10 blur-3xl"></div>
+  </div>
+  <div class="container-page">
+    <div class="mx-auto max-w-2xl text-center">
+      <div class="eyebrow mb-5 inline-flex">
+        <span class="eyebrow-dot"></span>
+        <span>The pipeline</span>
+      </div>
+      <h2 class="text-display-lg font-semibold text-balance">
+        One API. <span class="text-ink-400">Nine algorithms.</span>
+      </h2>
+      <p class="mt-5 text-pretty text-lg text-ink-300">
+        factorise escalates from fast, cheap methods to heavyweight sieves,
+        stopping the moment a factor is found. You don't pick — it does.
+      </p>
+    </div>
+
+    <div class="mt-16 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      {algorithms.map((a, i) => (
+        <article
+          class="group relative overflow-hidden rounded-2xl border border-white/[0.06] bg-white/[0.015] p-5 transition-all duration-500 hover:border-white/[0.12] hover:bg-white/[0.03]"
+        >
+          <div class="flex items-start justify-between">
+            <span class="text-[10px] font-mono uppercase tracking-[0.18em] text-ink-500">
+              0{i + 1}
+            </span>
+            <span class="rounded-full bg-white/[0.04] px-2 py-0.5 text-[10px] font-medium uppercase tracking-wider text-ink-400">
+              {a.role}
+            </span>
+          </div>
+
+          <h3 class="mt-5 text-lg font-semibold tracking-tight text-white">
+            {a.name}
+          </h3>
+          <p class="mt-2 text-[13px] leading-relaxed text-ink-400">
+            {a.summary}
+          </p>
+
+          <div class="mt-6 flex items-center justify-between border-t border-white/[0.05] pt-3 text-[11px] font-mono text-ink-400">
+            <span>{a.range}</span>
+            <span class="text-ink-500">{a.cost}</span>
+          </div>
+
+          <div aria-hidden class="absolute inset-x-0 -bottom-px h-px bg-gradient-to-r from-transparent via-accent-400/0 to-transparent transition-all duration-700 group-hover:via-accent-400/60"></div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
